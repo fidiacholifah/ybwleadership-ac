@@ -200,9 +200,10 @@
             </div>
           </div>
 
-          <div class="bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4">
+          <!-- Pengaturan Undian (Khusus Admin) -->
+          <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4" style="display: none;">
             <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-uii-gold"></i> Pengaturan Undian
+              <i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Undian MC
             </h3>
 
             <div>
@@ -214,18 +215,24 @@
               <label class="block text-xs font-medium text-gray-400 mb-1">Jumlah Peserta Di-Spin</label>
               <div class="flex items-center gap-2">
                 <input type="number" id="inputSpinCount" value="1" min="1" max="10" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white font-bold text-center focus:outline-none focus:border-uii-gold">
-                <div class="flex gap-1 admin-only" style="display: none;">
+                <div class="flex gap-1">
                   <button onclick="adjustSpinCount(-1)" class="px-3 py-2.5 bg-uii-navy border border-uii-border hover:bg-uii-border rounded-xl text-white font-bold cursor-pointer">-</button>
                   <button onclick="adjustSpinCount(1)" class="px-3 py-2.5 bg-uii-navy border border-uii-border hover:bg-uii-border rounded-xl text-white font-bold cursor-pointer">+</button>
                 </div>
               </div>
             </div>
 
-            <button id="btnSpin" onclick="triggerSpinWheel()" class="admin-only w-full py-4 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-black text-xl rounded-xl shadow-lg shadow-yellow-500/20 transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer" style="display: none;">
+            <button id="btnSpin" onclick="triggerSpinWheel()" class="w-full py-4 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-black text-xl rounded-xl shadow-lg shadow-yellow-500/20 transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-rotate text-2xl"></i> PUTAR
             </button>
-            <p class="peserta-only text-xs text-center text-gray-500 italic p-2 bg-uii-navy rounded-xl border border-uii-border">
-              <i class="fa-solid fa-info-circle text-uii-gold mr-1"></i> Kontrol undian dikendalikan langsung oleh MC Panggung.
+          </div>
+
+          <!-- Banner Peserta View-Only -->
+          <div class="peserta-only bg-uii-card p-5 rounded-2xl border border-uii-border text-center space-y-2">
+            <i class="fa-solid fa-dharmachakra text-3xl text-uii-gold mb-1 animate-spin" style="animation-duration: 8s;"></i>
+            <h4 class="text-sm font-bold text-white">Live Spin Wheel Display</h4>
+            <p class="text-xs text-gray-400 italic">
+              Roda undian dikendalikan langsung oleh MC di panggung. Hasil putaran akan muncul secara otomatis di layar kamu.
             </p>
           </div>
 
@@ -254,7 +261,7 @@
               <i class="fa-solid fa-file-import text-uii-gold"></i> Import CSV/JSON
               <input type="file" id="fileImportPeserta" accept=".csv,.json" class="hidden" onchange="handleImportPeserta(event)">
             </label>
-            <button onclick="exportDataPeserta()" class="px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            <button onclick="exportDataPeserta()" class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;">
               <i class="fa-solid fa-file-export text-uii-gold"></i> Export Data
             </button>
           </div>
@@ -300,7 +307,7 @@
             </h2>
             <p class="text-xs text-gray-400">Catatan partisipasi game & pemberian hadiah cuma-cuma</p>
           </div>
-          <button onclick="exportDataPartisipasi()" class="px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 self-start cursor-pointer">
+          <button onclick="exportDataPartisipasi()" class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 self-start cursor-pointer" style="display: none;">
             <i class="fa-solid fa-download text-uii-gold"></i> Export Rekap
           </button>
         </div>
@@ -640,7 +647,7 @@
       localChannel = new BroadcastChannel("ybw_event_channel");
     } catch(e){}
 
-    const ADMIN_PIN = "1008DIA";
+    const ADMIN_PIN = "1234";
     let currentMode = 'peserta';
     let activeBatch = 'batch1';
     let activeSpinFilter = 'all';
