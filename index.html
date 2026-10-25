@@ -1075,43 +1075,73 @@
       }
     }
 
-    function handleImportPeserta(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+function handleImportPeserta(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        try {
-          if (file.name.endsWith(".json")) {
-            const data = JSON.parse(content);
-            if (Array.isArray(data)) {
-              state.peserta = data;
-              pushState();
-            }
-          } else {
-            const lines = content.split("\n");
-            lines.forEach((line, i) => {
-              if (i === 0 || !line.trim()) return;
-              const [nama, gender, batch] = line.split(",").map(s => s.trim());
-              if (nama) {
-                state.peserta.push({
-                  id: "p-" + Date.now() + i,
-                  nama,
-                  gender: (gender || "L").toUpperCase(),
-                  batch: batch || activeBatch,
-                  excluded: false
-                });
-              }
-            });
-            pushState();
-          }
-        } catch (err) {
-          alert("Gagal membaca file import: " + err.message);
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const content = e.target.result;
+    try {
+      if (file.name.endsWith(".json")) {
+        const data = JSON.parse(content);
+        if (Array.isArray(data)) {
+          state.peserta = data;
+          pushState();
         }
-      };
-      reader.readAsText(file);
+      } else {
+        const lines = content.split("\n");
+        const newPeserta = [];
+        
+        lines.forEach((line, i) => {
+          if (i === 0 || !line.trim()) return; // Skip header & baris kosong
+          
+          // Hapus tanda petik ganda bawaan Excel
+          const cleanLine = line.replace(/"/g, '').trim();
+          if (!cleanLine) return;
+
+          // Otomatis deteksi pemisah titik koma (;) atau koma (,)
+          const delimiter = cleanLine.includes(';') ? ';' : ',';
+          const parts = cleanLine.split(delimiter).map(s => s.trim());
+          
+          const nama = parts[0];
+          let genderRaw = (parts[1] || 'L').toUpperCase();
+          let batchRaw = (parts[2] || activeBatch).toLowerCase();
+
+          // Normalisasi Gender (L/P)
+          const gender = genderRaw.startsWith('P') ? 'P' : 'L';
+
+          // Normalisasi Batch ("Batch 1", "batch 1", atau "batch1" -> "batch1")
+          let batch = 'batch1';
+          if (batchRaw.includes('2')) {
+            batch = 'batch2';
+          }
+
+          if (nama) {
+            newPeserta.push({
+              id: "p-" + Date.now() + i + Math.random().toString(36).substr(2, 3),
+              nama: nama,
+              gender: gender,
+              batch: batch,
+              excluded: false
+            });
+          }
+        });
+
+        if (newPeserta.length > 0) {
+          state.peserta = newPeserta;
+          pushState();
+          alert(`Berhasil mengimpor ${newPeserta.length} data peserta!`);
+        } else {
+          alert("Tidak ada data peserta yang berhasil dibaca.");
+        }
+      }
+    } catch (err) {
+      alert("Gagal membaca file import: " + err.message);
     }
+  };
+  reader.readAsText(file);
+}
 
     function exportDataPeserta() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.peserta, null, 2));
