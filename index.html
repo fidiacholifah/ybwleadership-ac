@@ -332,8 +332,11 @@
     </section>
 
     <!-- TAB 4: ARENA -->
-    <section id="tab-arena" class="tab-content space-y-6" style="display: none;">
-      <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4" style="display: none;">
+    <section id="tab-arena" class="tab-content space-y-6 relative" style="display: none;">
+      <!-- OVERLAY FLOATING EMOJI DI ARENA -->
+      <div id="arenaEmojiOverlay" class="pointer-events-none absolute inset-0 z-30 overflow-hidden"></div>
+
+      <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4 z-10 relative" style="display: none;">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-uii-border">
           <div class="flex items-center gap-3">
             <h3 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Sesi Arena</h3>
@@ -375,7 +378,7 @@
         </div>
       </div>
 
-      <div id="arenaActiveDisplay" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div id="arenaActiveDisplay" class="grid grid-cols-1 lg:grid-cols-12 gap-6 z-10 relative">
         <div class="lg:col-span-8 bg-uii-card p-6 rounded-2xl border border-uii-border flex flex-col space-y-4">
           <div class="flex items-center justify-between border-b border-uii-border pb-3">
             <div class="flex items-center gap-2">
@@ -422,7 +425,7 @@
         </div>
       </div>
 
-      <div id="arenaOffDisplay" class="bg-uii-card p-12 rounded-2xl border border-uii-border text-center space-y-4" style="display: none;">
+      <div id="arenaOffDisplay" class="bg-uii-card p-12 rounded-2xl border border-uii-border text-center space-y-4 z-10 relative" style="display: none;">
         <div class="w-20 h-20 bg-uii-navy border border-uii-border rounded-full flex items-center justify-center mx-auto text-uii-gold text-3xl shadow-inner">
           <i class="fa-solid fa-mug-hot"></i>
         </div>
@@ -435,68 +438,52 @@
 
     <!-- TAB 5: INTERAKTIF -->
     <section id="tab-interaktif" class="tab-content space-y-6" style="display: none;">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
-        <div class="lg:col-span-7 bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
-          <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-paper-plane text-uii-gold"></i> Form Response Peserta</h2>
-            <p class="text-xs text-gray-400">Kirimkan respon atau jawaban kamu langsung ke layar MC Panggung</p>
-          </div>
-
-          <form onsubmit="submitInteractiveAnswer(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-medium text-gray-400 mb-1">Nama Peserta</label>
-              <input type="text" id="interaktifNama" required placeholder="Masukkan nama lengkap kamu..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold">
-            </div>
-
-            <div>
-              <label class="block text-xs font-medium text-gray-400 mb-1">Jawaban / Tanggapan</label>
-              <textarea id="interaktifJawaban" required rows="3" placeholder="Tulis jawaban kamu di sini..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold resize-none"></textarea>
-            </div>
-
-            <div class="bg-uii-navy p-3.5 rounded-xl border border-uii-border flex items-center justify-between">
-              <span class="text-xs font-medium text-gray-400 flex items-center gap-2"><i class="fa-solid fa-stopwatch text-uii-gold"></i> Timer Sesi Active:</span>
-              <span id="interaktifTimerDisplay" class="font-mono text-base font-bold text-uii-gold">-- : --</span>
-            </div>
-
-            <button type="submit" class="w-full py-3.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-sm rounded-xl transition shadow-lg shadow-yellow-500/10 flex items-center justify-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-paper-plane"></i> Kirim Jawaban
-            </button>
-          </form>
-
-          <div class="pt-4 border-t border-uii-border space-y-3">
-            <label class="block text-xs font-medium text-gray-400">Kirim Emoji Reaksi ke Layar Utama:</label>
-            <div class="flex items-center gap-3 overflow-x-auto pb-2">
-              <button type="button" onclick="sendEmojiReaction('🔥')" class="text-2xl p-2.5 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🔥</button>
-              <button type="button" onclick="sendEmojiReaction('👏')" class="text-2xl p-2.5 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">👏</button>
-              <button type="button" onclick="sendEmojiReaction('❤️')" class="text-2xl p-2.5 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">❤️</button>
-              <button type="button" onclick="sendEmojiReaction('💡')" class="text-2xl p-2.5 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">💡</button>
-              <button type="button" onclick="sendEmojiReaction('🎉')" class="text-2xl p-2.5 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🎉</button>
-              <button type="button" onclick="sendEmojiReaction('🤩')" class="text-2xl p-2.5 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🤩</button>
-            </div>
-          </div>
-
+      <div class="max-w-2xl mx-auto bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-paper-plane text-uii-gold"></i> Form Response Peserta</h2>
+          <p class="text-xs text-gray-400">Kirimkan respon atau jawaban kamu langsung ke layar MC Panggung</p>
         </div>
 
-        <div class="lg:col-span-5 space-y-6">
-          <div class="admin-only bg-uii-card p-6 rounded-2xl border border-uii-border space-y-4" style="display: none;">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-stopwatch text-uii-gold"></i> Audio Timer Synth (Web Audio API)</h3>
-            <p class="text-xs text-gray-400">Picu audio sinyal sintetis "DOR! WAKTU HABIS".</p>
-
-            <div class="flex items-center gap-3">
-              <input type="number" id="inputSynthTimerSec" value="10" min="1" max="300" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-uii-gold">
-              <button onclick="startSynthTimer()" class="px-5 py-2.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-sm rounded-xl transition whitespace-nowrap cursor-pointer">Mulai Count</button>
-            </div>
-
-            <div class="text-center py-6 bg-uii-navy border border-uii-border rounded-xl">
-              <div id="synthTimerDisplay" class="font-mono text-4xl font-extrabold text-uii-gold">00:10</div>
-            </div>
+        <form onsubmit="submitInteractiveAnswer(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-400 mb-1">Nama Peserta</label>
+            <input type="text" id="interaktifNama" required placeholder="Masukkan nama lengkap kamu..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold">
           </div>
 
-          <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-3 relative min-h-[220px] overflow-hidden">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-icons text-uii-gold"></i> Reaction Stream Live</h3>
-            <div id="emojiStreamBox" class="relative w-full h-[150px] bg-uii-navy/50 rounded-xl border border-uii-border overflow-hidden"></div>
+          <div>
+            <label class="block text-xs font-medium text-gray-400 mb-1">Jawaban / Tanggapan</label>
+            <textarea id="interaktifJawaban" required rows="3" placeholder="Tulis jawaban kamu di sini..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold resize-none"></textarea>
           </div>
+
+          <div class="bg-uii-navy p-3.5 rounded-xl border border-uii-border flex items-center justify-between">
+            <span class="text-xs font-medium text-gray-400 flex items-center gap-2"><i class="fa-solid fa-stopwatch text-uii-gold"></i> Timer Sesi Active:</span>
+            <span id="interaktifTimerDisplay" class="font-mono text-base font-bold text-uii-gold">-- : --</span>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-sm rounded-xl transition shadow-lg shadow-yellow-500/10 flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Jawaban
+          </button>
+        </form>
+
+        <div class="pt-4 border-t border-uii-border space-y-3">
+          <label class="block text-xs font-medium text-gray-400">Kirim Emoji Reaksi ke Layar Arena:</label>
+          <div class="flex items-center justify-center gap-4 flex-wrap">
+            <button type="button" onclick="sendEmojiReaction('🔥')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🔥</button>
+            <button type="button" onclick="sendEmojiReaction('👏')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">👏</button>
+            <button type="button" onclick="sendEmojiReaction('❤️')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">❤️</button>
+            <button type="button" onclick="sendEmojiReaction('💡')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">💡</button>
+            <button type="button" onclick="sendEmojiReaction('🎉')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🎉</button>
+            <button type="button" onclick="sendEmojiReaction('🤩')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🤩</button>
+          </div>
+        </div>
+
+        <div class="admin-only bg-uii-navy p-4 rounded-xl border border-uii-border space-y-3" style="display: none;">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider"><i class="fa-solid fa-stopwatch text-uii-gold mr-1"></i> Audio Timer Synth (MC)</h3>
+          <div class="flex items-center gap-2">
+            <input type="number" id="inputSynthTimerSec" value="10" min="1" max="300" class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white">
+            <button onclick="startSynthTimer()" class="px-4 py-1.5 bg-uii-gold text-uii-navy font-bold text-xs rounded-lg whitespace-nowrap">Count</button>
+          </div>
+          <div id="synthTimerDisplay" class="font-mono text-xl font-bold text-uii-gold text-center">00:10</div>
         </div>
 
       </div>
@@ -517,10 +504,16 @@
 
       <div id="listSelectedNames" class="bg-uii-navy border border-uii-border rounded-xl p-4 max-h-48 overflow-y-auto space-y-2"></div>
 
-      <div class="space-y-2 pt-2">
+      <!-- Khusus Admin: Tombol Mitigasi -->
+      <div class="admin-only space-y-2 pt-2" style="display: none;">
         <button onclick="handleSpinMitigation('catat')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-check-circle"></i> Catat Partisipasi (Simpan ke Rekap)</button>
         <button onclick="handleSpinMitigation('gugur')" class="w-full py-3 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-user-slash"></i> Gugur / Tidak Hadir (Exclude dari Pool)</button>
         <button onclick="handleSpinMitigation('kembalikan')" class="w-full py-3 bg-uii-navy hover:bg-uii-border border border-uii-border text-gray-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-rotate-left"></i> Kembalikan ke Pool (Dapat Terundi Kembali)</button>
+      </div>
+
+      <!-- Khusus Peserta: Tombol Tutup Saja -->
+      <div class="peserta-only pt-2" style="display: none;">
+        <button onclick="closeSpinResultModal()" class="w-full py-3 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-xl transition cursor-pointer">Tutup</button>
       </div>
     </div>
   </div>
@@ -625,6 +618,7 @@
     let activeSpinFilter = 'all';
     let isSpinning = false;
     let wheelRotation = 0;
+    let lastProcessedSpinTimestamp = 0;
 
     let state = {
       peserta: [],
@@ -684,7 +678,7 @@
       }
 
       if (db) {
-        // 1. Dengar Perubahan State Utama (Hanya data ringan tanpa Base64)
+        // 1. Perubahan State Utama
         db.ref("ybw_event_state").on("value", (snapshot) => {
           const val = snapshot.val();
           if (val) {
@@ -694,15 +688,20 @@
           }
         });
 
-        // 2. Dengar Event Spin Wheel Real-time
+        // 2. Listener Spin Wheel (Hanya memutar jika ada trigger baru)
         db.ref("ybw_spin_event").on("value", (snapshot) => {
           const spinData = snapshot.val();
-          if (spinData && spinData.targetRotation && !isSpinning) {
-            animateWheelTo(spinData.targetRotation, spinData.winners);
+          if (spinData && spinData.targetRotation && spinData.timestamp) {
+            if (lastProcessedSpinTimestamp === 0) {
+              lastProcessedSpinTimestamp = spinData.timestamp;
+            } else if (spinData.timestamp > lastProcessedSpinTimestamp && !isSpinning) {
+              lastProcessedSpinTimestamp = spinData.timestamp;
+              animateWheelTo(spinData.targetRotation, spinData.winners);
+            }
           }
         });
 
-        // 3. Dengar Jawaban Interaktif Peserta Real-time
+        // 3. Listener Jawaban Interaktif
         db.ref("ybw_answers").on("child_added", (snapshot) => {
           const newAns = snapshot.val();
           if (newAns && newAns.id) {
@@ -715,7 +714,7 @@
           }
         });
 
-        // 4. Dengar Emoji Live Reaction
+        // 4. Listener Emoji
         db.ref("ybw_emojis").on("child_added", (snapshot) => {
           const emoji = snapshot.val();
           if (emoji) spawnFloatingEmoji(emoji);
@@ -727,7 +726,6 @@
 
     function mergeIncomingState(val) {
       if (!val) return;
-      // Pertahankan slide gambar lokal agar tidak terhapus
       const localSlides = {};
       if (state.arena && state.arena.quizzes) {
         state.arena.quizzes.forEach(q => { localSlides[q.id] = q.slides || []; });
@@ -789,7 +787,6 @@
 
     function pushStateToFirebase() {
       if (db && isFirebaseConnected) {
-        // Hapus Base64 slides dari payload Firebase agar super ringan
         const cleanState = JSON.parse(JSON.stringify(state));
         if (cleanState.arena && cleanState.arena.quizzes) {
           cleanState.arena.quizzes.forEach(q => { q.slides = []; });
@@ -1004,16 +1001,17 @@
       
       const shuffled = [...pool].sort(() => 0.5 - Math.random());
       const winners = shuffled.slice(0, Math.min(countNeeded, pool.length));
+      const nowTimestamp = Date.now();
+      lastProcessedSpinTimestamp = nowTimestamp;
 
       if (db && isFirebaseConnected) {
         db.ref("ybw_spin_event").set({
           targetRotation: targetRotation,
           winners: winners,
-          timestamp: Date.now()
+          timestamp: nowTimestamp
         });
       }
       
-      // Putar langsung di layar Admin
       animateWheelTo(targetRotation, winners);
     }
 
@@ -1060,6 +1058,10 @@
       document.getElementById("modalSpinResult").style.display = "flex";
     }
 
+    function closeSpinResultModal() {
+      document.getElementById("modalSpinResult").style.display = "none";
+    }
+
     function handleSpinMitigation(action) {
       const sesiName = document.getElementById("inputSesiGame").value || "Sesi Game";
       const winners = state.lastWinners || [];
@@ -1086,7 +1088,7 @@
         });
       }
 
-      document.getElementById("modalSpinResult").style.display = "none";
+      closeSpinResultModal();
       pushState();
     }
 
@@ -1553,25 +1555,26 @@
       }
     }
 
+    // ANIMASI EMOJI TERBANG DI ARENA
     function spawnFloatingEmoji(emoji) {
-      const box = document.getElementById("emojiStreamBox");
-      if (!box) return;
+      const container = document.getElementById("arenaEmojiOverlay");
+      if (!container) return;
 
       const el = document.createElement("div");
       el.textContent = emoji;
-      el.className = "absolute text-3xl transition-all duration-1000 ease-out pointer-events-none z-30";
+      el.className = "absolute text-4xl transition-all duration-1000 ease-out pointer-events-none drop-shadow-md z-40";
       el.style.left = Math.random() * 80 + 10 + "%";
-      el.style.bottom = "0px";
+      el.style.bottom = "10px";
       el.style.opacity = "1";
 
-      box.appendChild(el);
+      container.appendChild(el);
 
       setTimeout(() => {
-        el.style.bottom = "110px";
+        el.style.bottom = "80%";
         el.style.opacity = "0";
       }, 50);
 
-      setTimeout(() => el.remove(), 1000);
+      setTimeout(() => el.remove(), 1050);
     }
 
     let synthTimerInterval = null;
@@ -1638,12 +1641,3 @@
         new QRCode(container, {
           text: url,
           width: 180,
-          height: 180,
-          colorDark: "#050E1A",
-          colorLight: "#ffffff"
-        });
-      } catch(e){}
-    }
-  </script>
-</body>
-</html>
