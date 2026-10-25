@@ -47,29 +47,18 @@
     h1, h2, h3, .font-heading {
       font-family: 'Montserrat', sans-serif;
     }
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #050E1A;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1a2738;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #F5B800;
-    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #050E1A; }
+    ::-webkit-scrollbar-thumb { background: #1a2738; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F5B800; }
   </style>
 </head>
 <body class="bg-uii-navy text-gray-100 min-h-screen flex flex-col selection:bg-uii-gold selection:text-uii-navy">
 
-  <!-- ================= HEADER TOP BAR ================= -->
+  <!-- HEADER -->
   <header class="bg-uii-card border-b border-uii-border sticky top-0 z-40 px-4 py-3 shadow-xl">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
       
-      <!-- Kiri: Emblem & Title -->
       <div class="flex items-center space-x-4">
         <div style="width: 65px; height: 55px; border-radius: 12px;" class="bg-uii-gold flex flex-col items-center justify-center shadow-lg shadow-yellow-500/10 flex-shrink-0">
           <span class="text-uii-navy font-extrabold text-sm leading-tight tracking-wider">YBW</span>
@@ -84,28 +73,19 @@
         </div>
       </div>
 
-      <!-- Kanan: Stat Bar & Mode Switcher -->
       <div class="flex items-center gap-4 flex-wrap">
         <div class="hidden sm:flex items-center gap-4 text-xs bg-uii-navy px-3 py-2 rounded-lg border border-uii-border">
-          <div>
-            <span class="text-gray-400">Total Peserta:</span>
-            <span id="statTotalPeserta" class="font-bold text-white ml-1">0</span>
-          </div>
+          <div><span class="text-gray-400">Total Peserta:</span><span id="statTotalPeserta" class="font-bold text-white ml-1">0</span></div>
           <div class="h-4 w-px bg-uii-border"></div>
-          <div>
-            <span class="text-gray-400">Partisipan:</span>
-            <span id="statPartisipan" class="font-bold text-uii-gold ml-1">0</span>
-          </div>
+          <div><span class="text-gray-400">Partisipan:</span><span id="statPartisipan" class="font-bold text-uii-gold ml-1">0</span></div>
           <div class="h-4 w-px bg-uii-border"></div>
           <div class="text-gray-300 font-mono" id="realtimeClock">00:00:00 WIB</div>
         </div>
 
-        <!-- QR Code Button (Khusus Admin) -->
         <button onclick="openQRModal()" class="admin-only p-2 bg-uii-navy hover:bg-uii-border text-uii-gold rounded-lg border border-uii-border transition cursor-pointer z-10" style="display: none;" title="Tampilkan QR Code Akses Peserta">
           <i class="fa-solid fa-qrcode text-lg"></i>
         </button>
 
-        <!-- Mode Switcher -->
         <div class="bg-uii-navy p-1 rounded-xl border border-uii-border flex items-center z-10">
           <button id="btnModeAdmin" onclick="setMode('admin')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white cursor-pointer">
             <i class="fa-solid fa-user-shield"></i> Mode Admin
@@ -119,7 +99,7 @@
     </div>
   </header>
 
-  <!-- ================= NAV TAB BAR ================= -->
+  <!-- NAV TAB BAR -->
   <nav class="bg-uii-navy border-b border-uii-border px-4 py-2 sticky top-[73px] z-30">
     <div class="max-w-7xl mx-auto flex items-center justify-start overflow-x-auto gap-2 no-scrollbar">
       <button onclick="switchTab('spin')" id="tabBtn-spin" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 bg-uii-gold text-uii-navy cursor-pointer">
@@ -140,10 +120,10 @@
     </div>
   </nav>
 
-  <!-- ================= KONTEN UTAMA ================= -->
+  <!-- KONTEN UTAMA -->
   <main class="max-w-7xl mx-auto w-full p-4 md:p-6 flex-1 flex flex-col">
 
-    <!-- ================= TAB 1: SPIN WHEEL ================= -->
+    <!-- TAB 1: SPIN WHEEL -->
     <section id="tab-spin" class="tab-content space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
@@ -165,25 +145,17 @@
               <i class="fa-solid fa-filter text-uii-gold"></i> Filter Undian
             </h3>
 
-            <!-- FILTER BATCH -->
             <div class="pb-3 border-b border-uii-border">
               <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">
                 <i class="fa-solid fa-layer-group text-uii-gold mr-1"></i> Pilih Batch Peserta:
               </label>
               <div class="grid grid-cols-3 gap-2">
-                <button type="button" onclick="setSpinBatchFilter('batch1')" id="btnSpinBatch1" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-gold bg-uii-gold text-uii-navy transition cursor-pointer">
-                  Batch 1
-                </button>
-                <button type="button" onclick="setSpinBatchFilter('batch2')" id="btnSpinBatch2" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">
-                  Batch 2
-                </button>
-                <button type="button" onclick="setSpinBatchFilter('all')" id="btnSpinBatchAll" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">
-                  Semua Batch
-                </button>
+                <button type="button" onclick="setSpinBatchFilter('batch1')" id="btnSpinBatch1" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-gold bg-uii-gold text-uii-navy transition cursor-pointer">Batch 1</button>
+                <button type="button" onclick="setSpinBatchFilter('batch2')" id="btnSpinBatch2" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">Batch 2</button>
+                <button type="button" onclick="setSpinBatchFilter('all')" id="btnSpinBatchAll" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">Semua Batch</button>
               </div>
             </div>
 
-            <!-- FILTER GENDER -->
             <div class="grid grid-cols-1 gap-2.5">
               <label onclick="setSpinFilter('all')" class="spin-filter-card flex items-center justify-between p-3.5 rounded-xl border border-uii-gold bg-uii-goldLight cursor-pointer transition">
                 <div class="flex items-center gap-3">
@@ -249,9 +221,7 @@
           <div class="peserta-only bg-uii-card p-5 rounded-2xl border border-uii-border text-center space-y-2">
             <i class="fa-solid fa-dharmachakra text-3xl text-uii-gold mb-1 animate-spin" style="animation-duration: 8s;"></i>
             <h4 class="text-sm font-bold text-white">Live Spin Wheel Display</h4>
-            <p class="text-xs text-gray-400 italic">
-              Roda undian dikendalikan langsung oleh MC di panggung. Hasil putaran akan muncul secara otomatis di layar kamu.
-            </p>
+            <p class="text-xs text-gray-400 italic">Roda undian dikendalikan langsung oleh MC di panggung. Hasil putaran akan muncul secara otomatis di layar kamu.</p>
           </div>
 
         </div>
@@ -259,45 +229,31 @@
       </div>
     </section>
 
-    <!-- ================= TAB 2: DATA PESERTA ================= -->
+    <!-- TAB 2: DATA PESERTA -->
     <section id="tab-data" class="tab-content space-y-6" style="display: none;">
       <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
         
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-users-gear text-uii-gold"></i> Kelola Data Peserta
-            </h2>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users-gear text-uii-gold"></i> Kelola Data Peserta</h2>
             <p class="text-xs text-gray-400">Daftar nama peserta aktif per Batch</p>
           </div>
 
           <div class="flex items-center gap-2 flex-wrap">
-            <button onclick="openModalTambahPeserta()" class="admin-only px-3.5 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;">
-              <i class="fa-solid fa-plus"></i> Tambah Peserta
-            </button>
+            <button onclick="openModalTambahPeserta()" class="admin-only px-3.5 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;"><i class="fa-solid fa-plus"></i> Tambah Peserta</button>
             <label class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl cursor-pointer transition flex items-center gap-1.5" style="display: none;">
               <i class="fa-solid fa-file-import text-uii-gold"></i> Import CSV
               <input type="file" id="fileImportPeserta" accept=".csv,.json" class="hidden" onchange="handleImportPeserta(event)">
             </label>
-            <button onclick="manualSaveData()" class="admin-only px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Simpan Permanen">
-              <i class="fa-solid fa-floppy-disk"></i> Simpan Data
-            </button>
-            <button onclick="resetTestingData()" class="admin-only px-3.5 py-2 bg-amber-600/80 hover:bg-amber-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Reset Hasil Spin Saja">
-              <i class="fa-solid fa-rotate-left"></i> Reset Sesi Uji Coba
-            </button>
-            <button onclick="resetAllPeserta()" class="admin-only px-3.5 py-2 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Kosongkan Semua Peserta">
-              <i class="fa-solid fa-trash-can"></i> Hapus Semua Peserta
-            </button>
+            <button onclick="manualSaveData()" class="admin-only px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Simpan Permanen"><i class="fa-solid fa-floppy-disk"></i> Simpan Data</button>
+            <button onclick="resetTestingData()" class="admin-only px-3.5 py-2 bg-amber-600/80 hover:bg-amber-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Reset Hasil Spin Saja"><i class="fa-solid fa-rotate-left"></i> Reset Sesi Uji Coba</button>
+            <button onclick="resetAllPeserta()" class="admin-only px-3.5 py-2 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Kosongkan Semua Peserta"><i class="fa-solid fa-trash-can"></i> Hapus Semua Peserta</button>
           </div>
         </div>
 
         <div class="flex border-b border-uii-border gap-4">
-          <button onclick="filterBatchData('batch1')" id="batchTab-1" class="pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-calendar-day"></i> Batch 1 (27 - 28 Oktober 2026)
-          </button>
-          <button onclick="filterBatchData('batch2')" id="batchTab-2" class="pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-calendar-day"></i> Batch 2 (29 - 30 Oktober 2026)
-          </button>
+          <button onclick="filterBatchData('batch1')" id="batchTab-1" class="pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-calendar-day"></i> Batch 1 (27 - 28 Oktober 2026)</button>
+          <button onclick="filterBatchData('batch2')" id="batchTab-2" class="pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-calendar-day"></i> Batch 2 (29 - 30 Oktober 2026)</button>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-uii-navy p-3.5 rounded-xl border border-uii-border">
@@ -335,23 +291,19 @@
                 <th class="px-4 py-3 text-right rounded-r-lg admin-only" style="display: none;">Aksi</th>
               </tr>
             </thead>
-            <tbody id="tableBodyPeserta" class="divide-y divide-uii-border/50">
-            </tbody>
+            <tbody id="tableBodyPeserta" class="divide-y divide-uii-border/50"></tbody>
           </table>
         </div>
 
       </div>
     </section>
 
-    <!-- ================= TAB 3: PARTISIPASI PESERTA ================= -->
+    <!-- TAB 3: PARTISIPASI PESERTA -->
     <section id="tab-partisipasi" class="tab-content space-y-6" style="display: none;">
       <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
-        
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-award text-uii-gold"></i> Rekap Partisipasi & Hadiah Peserta
-            </h2>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-award text-uii-gold"></i> Rekap Partisipasi & Hadiah Peserta</h2>
             <p class="text-xs text-gray-400">Catatan partisipasi game & pemberian hadiah cuma-cuma</p>
           </div>
           <button onclick="exportDataPartisipasi()" class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 self-start cursor-pointer" style="display: none;">
@@ -373,24 +325,18 @@
                 <th class="px-4 py-3 text-right rounded-r-lg admin-only" style="display: none;">Aksi</th>
               </tr>
             </thead>
-            <tbody id="tableBodyPartisipasi" class="divide-y divide-uii-border/50">
-            </tbody>
+            <tbody id="tableBodyPartisipasi" class="divide-y divide-uii-border/50"></tbody>
           </table>
         </div>
-
       </div>
     </section>
 
-    <!-- ================= TAB 4: ARENA ================= -->
+    <!-- TAB 4: ARENA -->
     <section id="tab-arena" class="tab-content space-y-6" style="display: none;">
-      
       <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4" style="display: none;">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-uii-border">
-          
           <div class="flex items-center gap-3">
-            <h3 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Sesi Arena
-            </h3>
+            <h3 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Sesi Arena</h3>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" id="toggleArenaStatus" class="sr-only peer" onchange="toggleArenaSession(this.checked)">
               <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
@@ -398,19 +344,12 @@
             </label>
           </div>
 
-          <!-- MULTI QUIZ SELECTOR -->
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-xs font-bold text-gray-400">Pilih Quiz:</span>
-            <select id="selectQuizSet" onchange="switchQuizSet(this.value)" class="bg-uii-navy border border-uii-border text-xs text-white rounded-lg px-3 py-1.5 focus:outline-none focus:border-uii-gold font-bold">
-            </select>
-            <button onclick="addNewQuizSet()" class="px-3 py-1.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition cursor-pointer">
-              <i class="fa-solid fa-plus"></i> Quiz Baru
-            </button>
-            <button onclick="deleteCurrentQuizSet()" class="px-2.5 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer" title="Hapus Quiz Ini">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
+            <select id="selectQuizSet" onchange="switchQuizSet(this.value)" class="bg-uii-navy border border-uii-border text-xs text-white rounded-lg px-3 py-1.5 focus:outline-none focus:border-uii-gold font-bold"></select>
+            <button onclick="addNewQuizSet()" class="px-3 py-1.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition cursor-pointer"><i class="fa-solid fa-plus"></i> Quiz Baru</button>
+            <button onclick="deleteCurrentQuizSet()" class="px-2.5 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
           </div>
-
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
@@ -423,9 +362,7 @@
               <label class="block text-xs font-medium text-gray-400 mb-1">Timer Detik:</label>
               <input type="number" id="inputArenaTimerSec" value="30" class="w-full bg-uii-navy border border-uii-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-uii-gold">
             </div>
-            <button onclick="startArenaTimer()" class="px-4 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition h-[34px] cursor-pointer">
-              Start Timer
-            </button>
+            <button onclick="startArenaTimer()" class="px-4 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition h-[34px] cursor-pointer">Start Timer</button>
           </div>
         </div>
 
@@ -434,9 +371,7 @@
             <i class="fa-solid fa-cloud-arrow-up text-uii-gold"></i> Upload Slide Gambar Ke Quiz Ini
             <input type="file" id="inputSlideArena" accept="image/*" multiple class="hidden" onchange="handleUploadSlideArena(event)">
           </label>
-          <button onclick="clearArenaSlides()" class="px-3 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer">
-            <i class="fa-solid fa-trash-can"></i> Reset Slide Gambar
-          </button>
+          <button onclick="clearArenaSlides()" class="px-3 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer"><i class="fa-solid fa-trash-can"></i> Reset Slide Gambar</button>
         </div>
       </div>
 
@@ -462,12 +397,8 @@
             </div>
 
             <div class="admin-only absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-between opacity-0 group-hover:opacity-100 transition" style="display: none;">
-              <button onclick="prevArenaSlide()" class="px-3 py-1.5 bg-uii-navy/80 hover:bg-uii-gold hover:text-uii-navy text-white text-xs font-bold rounded-lg border border-uii-border transition cursor-pointer">
-                <i class="fa-solid fa-chevron-left"></i> Prev Slide
-              </button>
-              <button onclick="nextArenaSlide()" class="px-3 py-1.5 bg-uii-navy/80 hover:bg-uii-gold hover:text-uii-navy text-white text-xs font-bold rounded-lg border border-uii-border transition cursor-pointer">
-                Next Slide <i class="fa-solid fa-chevron-right"></i>
-              </button>
+              <button onclick="prevArenaSlide()" class="px-3 py-1.5 bg-uii-navy/80 hover:bg-uii-gold hover:text-uii-navy text-white text-xs font-bold rounded-lg border border-uii-border transition cursor-pointer"><i class="fa-solid fa-chevron-left"></i> Prev Slide</button>
+              <button onclick="nextArenaSlide()" class="px-3 py-1.5 bg-uii-navy/80 hover:bg-uii-gold hover:text-uii-navy text-white text-xs font-bold rounded-lg border border-uii-border transition cursor-pointer">Next Slide <i class="fa-solid fa-chevron-right"></i></button>
             </div>
           </div>
 
@@ -502,15 +433,13 @@
       </div>
     </section>
 
-    <!-- ================= TAB 5: INTERAKTIF ================= -->
+    <!-- TAB 5: INTERAKTIF -->
     <section id="tab-interaktif" class="tab-content space-y-6" style="display: none;">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         <div class="lg:col-span-7 bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
           <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-paper-plane text-uii-gold"></i> Form Response Peserta
-            </h2>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-paper-plane text-uii-gold"></i> Form Response Peserta</h2>
             <p class="text-xs text-gray-400">Kirimkan respon atau jawaban kamu langsung ke layar MC Panggung</p>
           </div>
 
@@ -526,9 +455,7 @@
             </div>
 
             <div class="bg-uii-navy p-3.5 rounded-xl border border-uii-border flex items-center justify-between">
-              <span class="text-xs font-medium text-gray-400 flex items-center gap-2">
-                <i class="fa-solid fa-stopwatch text-uii-gold"></i> Timer Sesi Active:
-              </span>
+              <span class="text-xs font-medium text-gray-400 flex items-center gap-2"><i class="fa-solid fa-stopwatch text-uii-gold"></i> Timer Sesi Active:</span>
               <span id="interaktifTimerDisplay" class="font-mono text-base font-bold text-uii-gold">-- : --</span>
             </div>
 
@@ -553,16 +480,12 @@
 
         <div class="lg:col-span-5 space-y-6">
           <div class="admin-only bg-uii-card p-6 rounded-2xl border border-uii-border space-y-4" style="display: none;">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <i class="fa-solid fa-stopwatch text-uii-gold"></i> Audio Timer Synth (Web Audio API)
-            </h3>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-stopwatch text-uii-gold"></i> Audio Timer Synth (Web Audio API)</h3>
             <p class="text-xs text-gray-400">Picu audio sinyal sintetis "DOR! WAKTU HABIS".</p>
 
             <div class="flex items-center gap-3">
               <input type="number" id="inputSynthTimerSec" value="10" min="1" max="300" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-uii-gold">
-              <button onclick="startSynthTimer()" class="px-5 py-2.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-sm rounded-xl transition whitespace-nowrap cursor-pointer">
-                Mulai Count
-              </button>
+              <button onclick="startSynthTimer()" class="px-5 py-2.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-sm rounded-xl transition whitespace-nowrap cursor-pointer">Mulai Count</button>
             </div>
 
             <div class="text-center py-6 bg-uii-navy border border-uii-border rounded-xl">
@@ -571,11 +494,8 @@
           </div>
 
           <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-3 relative min-h-[220px] overflow-hidden">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <i class="fa-solid fa-icons text-uii-gold"></i> Reaction Stream Live
-            </h3>
-            <div id="emojiStreamBox" class="relative w-full h-[150px] bg-uii-navy/50 rounded-xl border border-uii-border overflow-hidden">
-            </div>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-icons text-uii-gold"></i> Reaction Stream Live</h3>
+            <div id="emojiStreamBox" class="relative w-full h-[150px] bg-uii-navy/50 rounded-xl border border-uii-border overflow-hidden"></div>
           </div>
         </div>
 
@@ -584,32 +504,23 @@
 
   </main>
 
-  <!-- ================= MODALS ================= -->
+  <!-- MODALS -->
 
   <!-- Spin Result Modal -->
   <div id="modalSpinResult" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4" style="display: none;">
     <div class="bg-uii-card border border-uii-border w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-6">
       <div class="text-center space-y-2">
-        <div class="w-16 h-16 bg-uii-goldLight border border-uii-gold rounded-full flex items-center justify-center mx-auto text-uii-gold text-2xl">
-          <i class="fa-solid fa-bullhorn"></i>
-        </div>
+        <div class="w-16 h-16 bg-uii-goldLight border border-uii-gold rounded-full flex items-center justify-center mx-auto text-uii-gold text-2xl"><i class="fa-solid fa-bullhorn"></i></div>
         <h2 class="text-xl font-extrabold text-white">Peserta Terpilih Berpartisipasi</h2>
         <p class="text-xs text-gray-400">Hasil putaran undian kuis/game:</p>
       </div>
 
-      <div id="listSelectedNames" class="bg-uii-navy border border-uii-border rounded-xl p-4 max-h-48 overflow-y-auto space-y-2">
-      </div>
+      <div id="listSelectedNames" class="bg-uii-navy border border-uii-border rounded-xl p-4 max-h-48 overflow-y-auto space-y-2"></div>
 
       <div class="space-y-2 pt-2">
-        <button onclick="handleSpinMitigation('catat')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-check-circle"></i> Catat Partisipasi (Simpan ke Rekap)
-        </button>
-        <button onclick="handleSpinMitigation('gugur')" class="w-full py-3 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-user-slash"></i> Gugur / Tidak Hadir (Exclude dari Pool)
-        </button>
-        <button onclick="handleSpinMitigation('kembalikan')" class="w-full py-3 bg-uii-navy hover:bg-uii-border border border-uii-border text-gray-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-rotate-left"></i> Kembalikan ke Pool (Dapat Terundi Kembali)
-        </button>
+        <button onclick="handleSpinMitigation('catat')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-check-circle"></i> Catat Partisipasi (Simpan ke Rekap)</button>
+        <button onclick="handleSpinMitigation('gugur')" class="w-full py-3 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-user-slash"></i> Gugur / Tidak Hadir (Exclude dari Pool)</button>
+        <button onclick="handleSpinMitigation('kembalikan')" class="w-full py-3 bg-uii-navy hover:bg-uii-border border border-uii-border text-gray-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-rotate-left"></i> Kembalikan ke Pool (Dapat Terundi Kembali)</button>
       </div>
     </div>
   </div>
@@ -618,9 +529,7 @@
   <div id="modalQR" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4" style="display: none;">
     <div class="bg-uii-card border border-uii-border w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-5 text-center">
       <div class="flex items-center justify-between border-b border-uii-border pb-3">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-qrcode text-uii-gold"></i> QR Code Akses Peserta
-        </h3>
+        <h3 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-qrcode text-uii-gold"></i> QR Code Akses Peserta</h3>
         <button onclick="closeQRModal()" class="text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
@@ -669,7 +578,7 @@
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC REALTIME MULTI-DEVICE ================= -->
+  <!-- JAVASCRIPT REALTIME -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDdKynFAaq_etXZoC_PC6TVzJ8-_8h5cqI",
@@ -707,9 +616,7 @@
     }
 
     let localChannel = null;
-    try {
-      localChannel = new BroadcastChannel("ybw_event_channel");
-    } catch(e){}
+    try { localChannel = new BroadcastChannel("ybw_event_channel"); } catch(e){}
 
     const ADMIN_PIN = "1008DIA";
     let currentMode = 'peserta';
@@ -754,8 +661,7 @@
       if (localChannel) {
         localChannel.onmessage = (msg) => {
           if (msg.data && msg.data.type === "STATE_UPDATE") {
-            state = msg.data.payload;
-            updateUI();
+            mergeIncomingState(msg.data.payload);
           } else if (msg.data && msg.data.type === "EMOJI") {
             spawnFloatingEmoji(msg.data.emoji);
           }
@@ -769,7 +675,6 @@
     }
 
     function initDataSync() {
-      // Prioritaskan mengambil dari LocalStorage lokal jika tersedia
       const localData = localStorage.getItem("ybw_event_state");
       if (localData) {
         try {
@@ -779,20 +684,17 @@
       }
 
       if (db) {
-        // 1. Dengar Perubahan State Utama (Data Peserta, Batch, Quiz)
+        // 1. Dengar Perubahan State Utama (Hanya data ringan tanpa Base64)
         db.ref("ybw_event_state").on("value", (snapshot) => {
           const val = snapshot.val();
           if (val) {
-            state = val;
-            ensureStateStructure();
-            localStorage.setItem("ybw_event_state", JSON.stringify(state));
-            updateUI();
-          } else {
+            mergeIncomingState(val);
+          } else if (currentMode === 'admin') {
             pushStateToFirebase();
           }
         });
 
-        // 2. Dengar Perubahan Event Spin Wheel Real-time dari Admin
+        // 2. Dengar Event Spin Wheel Real-time
         db.ref("ybw_spin_event").on("value", (snapshot) => {
           const spinData = snapshot.val();
           if (spinData && spinData.targetRotation && !isSpinning) {
@@ -800,13 +702,12 @@
           }
         });
 
-        // 3. Dengar Jawaban Interaktif Real-time dari Peserta
+        // 3. Dengar Jawaban Interaktif Peserta Real-time
         db.ref("ybw_answers").on("child_added", (snapshot) => {
           const newAns = snapshot.val();
           if (newAns && newAns.id) {
             const quiz = getActiveQuiz();
             if (!quiz.answers) quiz.answers = [];
-            // Masukkan jika belum ada
             if (!quiz.answers.some(a => a.id === newAns.id)) {
               quiz.answers.unshift(newAns);
               renderArenaAnswersList();
@@ -821,6 +722,31 @@
         });
       }
 
+      updateUI();
+    }
+
+    function mergeIncomingState(val) {
+      if (!val) return;
+      // Pertahankan slide gambar lokal agar tidak terhapus
+      const localSlides = {};
+      if (state.arena && state.arena.quizzes) {
+        state.arena.quizzes.forEach(q => { localSlides[q.id] = q.slides || []; });
+      }
+
+      state.peserta = val.peserta || [];
+      state.partisipasi = val.partisipasi || [];
+      if (val.arena) {
+        state.arena.status = val.arena.status;
+        state.arena.activeQuizId = val.arena.activeQuizId;
+        if (val.arena.quizzes) {
+          state.arena.quizzes = val.arena.quizzes.map(q => ({
+            ...q,
+            slides: localSlides[q.id] || q.slides || []
+          }));
+        }
+      }
+      ensureStateStructure();
+      localStorage.setItem("ybw_event_state", JSON.stringify(state));
       updateUI();
     }
 
@@ -852,10 +778,7 @@
 
     function pushState() {
       localStorage.setItem("ybw_event_state", JSON.stringify(state));
-      
-      if (db && isFirebaseConnected) {
-        db.ref("ybw_event_state").set(state);
-      }
+      pushStateToFirebase();
       
       if (localChannel) {
         localChannel.postMessage({ type: "STATE_UPDATE", payload: state });
@@ -865,7 +788,14 @@
     }
 
     function pushStateToFirebase() {
-      if (db && isFirebaseConnected) db.ref("ybw_event_state").set(state);
+      if (db && isFirebaseConnected) {
+        // Hapus Base64 slides dari payload Firebase agar super ringan
+        const cleanState = JSON.parse(JSON.stringify(state));
+        if (cleanState.arena && cleanState.arena.quizzes) {
+          cleanState.arena.quizzes.forEach(q => { q.slides = []; });
+        }
+        db.ref("ybw_event_state").set(cleanState);
+      }
     }
 
     function manualSaveData() {
@@ -876,12 +806,8 @@
     function resetTestingData() {
       if (confirm("Reset Hasil Uji Coba?\n\nIni akan mengembalikan semua peserta yang 'Excluded' kembali ke Active Pool dan mengosongkan Rekap Partisipasi.")) {
         state.partisipasi = [];
-        if (state.peserta) {
-          state.peserta.forEach(p => p.excluded = false);
-        }
-        if (db && isFirebaseConnected) {
-          db.ref("ybw_answers").remove();
-        }
+        if (state.peserta) state.peserta.forEach(p => p.excluded = false);
+        if (db && isFirebaseConnected) db.ref("ybw_answers").remove();
         pushState();
         alert("Sesi uji coba berhasil di-reset!");
       }
@@ -1065,13 +991,7 @@
       }
     }
 
-    // REAL-TIME TRIGGER SPIN WHEEL
     function triggerSpinWheel() {
-      if (currentMode !== 'admin') {
-        alert("Hanya Admin/MC yang dapat memutar undian!");
-        return;
-      }
-
       if (isSpinning) return;
       const pool = getFilteredWheelPool();
       if (pool.length === 0) {
@@ -1085,16 +1005,16 @@
       const shuffled = [...pool].sort(() => 0.5 - Math.random());
       const winners = shuffled.slice(0, Math.min(countNeeded, pool.length));
 
-      // Broadcast ke Firebase agar seluruh HP peserta ikut berputar
       if (db && isFirebaseConnected) {
         db.ref("ybw_spin_event").set({
           targetRotation: targetRotation,
           winners: winners,
           timestamp: Date.now()
         });
-      } else {
-        animateWheelTo(targetRotation, winners);
       }
+      
+      // Putar langsung di layar Admin
+      animateWheelTo(targetRotation, winners);
     }
 
     function animateWheelTo(targetRot, winners) {
@@ -1193,12 +1113,8 @@
 
       let list = (state.peserta || []).filter(p => p.batch === activeBatch);
 
-      if (searchNama) {
-        list = list.filter(p => p.nama.toLowerCase().includes(searchNama));
-      }
-      if (filterGender !== "all") {
-        list = list.filter(p => p.gender === filterGender);
-      }
+      if (searchNama) list = list.filter(p => p.nama.toLowerCase().includes(searchNama));
+      if (filterGender !== "all") list = list.filter(p => p.gender === filterGender);
       if (filterStatus !== "all") {
         if (filterStatus === "active") list = list.filter(p => !p.excluded);
         if (filterStatus === "excluded") list = list.filter(p => p.excluded);
@@ -1248,7 +1164,6 @@
             
             lines.forEach((line, i) => {
               if (i === 0 || !line.trim()) return;
-              
               const cleanLine = line.replace(/"/g, '').trim();
               if (!cleanLine) return;
 
@@ -1258,13 +1173,10 @@
               const nama = parts[0];
               let genderRaw = (parts[1] || 'L').toUpperCase();
               let batchRaw = (parts[2] || activeBatch).toLowerCase();
-
               const gender = genderRaw.startsWith('P') ? 'P' : 'L';
 
               let batch = 'batch1';
-              if (batchRaw.includes('2')) {
-                batch = 'batch2';
-              }
+              if (batchRaw.includes('2')) batch = 'batch2';
 
               if (nama) {
                 newPeserta.push({
@@ -1312,7 +1224,6 @@
       const batch = document.getElementById("formPesertaBatch").value;
 
       if (!nama) return alert("Isi nama peserta!");
-
       if (!state.peserta) state.peserta = [];
 
       if (id) {
@@ -1369,9 +1280,7 @@
           <td class="px-4 py-3 text-xs uppercase text-gray-400">${item.batch}</td>
           <td class="px-4 py-3 text-xs text-gray-300">${item.date}</td>
           <td class="px-4 py-3 text-xs text-uii-gold">${item.sesi}</td>
-          <td class="px-4 py-3 text-xs">
-            <span class="px-2 py-0.5 rounded border bg-uii-navy text-white border-uii-border">${item.statusPartisipasi}</span>
-          </td>
+          <td class="px-4 py-3 text-xs"><span class="px-2 py-0.5 rounded border bg-uii-navy text-white border-uii-border">${item.statusPartisipasi}</span></td>
           <td class="px-4 py-3 text-xs">
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${item.statusHadiah === 'Menang Game' ? 'bg-amber-900/50 text-amber-300 border border-amber-700' : item.statusHadiah === 'Hadiah Cuma-Cuma' ? 'bg-purple-900/50 text-purple-300 border border-purple-700' : 'bg-gray-800 text-gray-400'}">
               ${item.statusHadiah}
@@ -1608,7 +1517,6 @@
       pushState();
     }
 
-    // KIRIM JAWABAN INTERAKTIF VIA NODE FIREBASE TERPISAH
     function submitInteractiveAnswer(e) {
       e.preventDefault();
       const nama = document.getElementById("interaktifNama").value.trim();
