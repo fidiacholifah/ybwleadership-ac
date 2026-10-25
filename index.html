@@ -100,9 +100,9 @@
           <div class="text-gray-300 font-mono" id="realtimeClock">00:00:00 WIB</div>
         </div>
 
-        <!-- QR Code Button -->
+        <!-- QR Code Button (Khusus Admin) -->
         <button onclick="openQRModal()" class="admin-only p-2 bg-uii-navy hover:bg-uii-border text-uii-gold rounded-lg border border-uii-border transition cursor-pointer z-10" style="display: none;" title="Tampilkan QR Code Akses Peserta">
-  <i class="fa-solid fa-qrcode text-lg"></i>
+          <i class="fa-solid fa-qrcode text-lg"></i>
         </button>
 
         <!-- Mode Switcher -->
@@ -200,7 +200,6 @@
             </div>
           </div>
 
-          <!-- Pengaturan Undian (Khusus Admin) -->
           <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4" style="display: none;">
             <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
               <i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Undian MC
@@ -227,7 +226,6 @@
             </button>
           </div>
 
-          <!-- Banner Peserta View-Only -->
           <div class="peserta-only bg-uii-card p-5 rounded-2xl border border-uii-border text-center space-y-2">
             <i class="fa-solid fa-dharmachakra text-3xl text-uii-gold mb-1 animate-spin" style="animation-duration: 8s;"></i>
             <h4 class="text-sm font-bold text-white">Live Spin Wheel Display</h4>
@@ -245,6 +243,7 @@
     <section id="tab-data" class="tab-content space-y-6" style="display: none;">
       <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
         
+        <!-- Header & Action Buttons -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -258,15 +257,22 @@
               <i class="fa-solid fa-plus"></i> Tambah Peserta
             </button>
             <label class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl cursor-pointer transition flex items-center gap-1.5" style="display: none;">
-              <i class="fa-solid fa-file-import text-uii-gold"></i> Import CSV/JSON
+              <i class="fa-solid fa-file-import text-uii-gold"></i> Import CSV
               <input type="file" id="fileImportPeserta" accept=".csv,.json" class="hidden" onchange="handleImportPeserta(event)">
             </label>
-            <button onclick="exportDataPeserta()" class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;">
-              <i class="fa-solid fa-file-export text-uii-gold"></i> Export Data
+            <button onclick="manualSaveData()" class="admin-only px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Simpan Permanen">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Data
+            </button>
+            <button onclick="resetTestingData()" class="admin-only px-3.5 py-2 bg-amber-600/80 hover:bg-amber-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Reset Hasil Spin Saja">
+              <i class="fa-solid fa-rotate-left"></i> Reset Sesi Uji Coba
+            </button>
+            <button onclick="resetAllPeserta()" class="admin-only px-3.5 py-2 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Kosongkan Semua Peserta">
+              <i class="fa-solid fa-trash-can"></i> Hapus Semua Peserta
             </button>
           </div>
         </div>
 
+        <!-- Filter Batch Tabs -->
         <div class="flex border-b border-uii-border gap-4">
           <button onclick="filterBatchData('batch1')" id="batchTab-1" class="pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer">
             <i class="fa-solid fa-calendar-day"></i> Batch 1 (27 - 28 Oktober 2026)
@@ -274,6 +280,30 @@
           <button onclick="filterBatchData('batch2')" id="batchTab-2" class="pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 cursor-pointer">
             <i class="fa-solid fa-calendar-day"></i> Batch 2 (29 - 30 Oktober 2026)
           </button>
+        </div>
+
+        <!-- Filter Controls Bar (Search & Dropdowns) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-uii-navy p-3.5 rounded-xl border border-uii-border">
+          <div>
+            <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-magnifying-glass text-uii-gold mr-1"></i> Cari Nama Peserta</label>
+            <input type="text" id="filterPesertaNama" oninput="renderPesertaTable()" placeholder="Ketik nama..." class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-uii-gold">
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-venus-mars text-uii-gold mr-1"></i> Filter Gender</label>
+            <select id="filterPesertaGender" onchange="renderPesertaTable()" class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-uii-gold">
+              <option value="all">Semua Gender</option>
+              <option value="L">Laki-Laki (L)</option>
+              <option value="P">Perempuan (P)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-shield-halved text-uii-gold mr-1"></i> Filter Status Pool</label>
+            <select id="filterPesertaStatus" onchange="renderPesertaTable()" class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-uii-gold">
+              <option value="all">Semua Status</option>
+              <option value="active">Active Pool (Bisa Terundi)</option>
+              <option value="excluded">Excluded (Sudah Terundi / Gugur)</option>
+            </select>
+          </div>
         </div>
 
         <div class="overflow-x-auto">
@@ -655,16 +685,7 @@
     let wheelRotation = 0;
 
     let state = {
-      peserta: [
-        { id: "p1", nama: "Ahmad Fauzi", gender: "L", batch: "batch1", excluded: false },
-        { id: "p2", nama: "Siti Rahmawati", gender: "P", batch: "batch1", excluded: false },
-        { id: "p3", nama: "Budi Santoso", gender: "L", batch: "batch1", excluded: false },
-        { id: "p4", nama: "Dewi Lestari", gender: "P", batch: "batch1", excluded: false },
-        { id: "p5", nama: "Eko Prasetyo", gender: "L", batch: "batch1", excluded: false },
-        { id: "p6", nama: "Fitri Handayani", gender: "P", batch: "batch2", excluded: false },
-        { id: "p7", nama: "Giri Wijaya", gender: "L", batch: "batch2", excluded: false },
-        { id: "p8", nama: "Hany Sulaiman", gender: "P", batch: "batch2", excluded: false }
-      ],
+      peserta: [],
       partisipasi: [],
       arena: {
         status: false,
@@ -706,16 +727,23 @@
     }
 
     function initDataSync() {
+      // 1. Ambil dari LocalStorage dulu sebagai perlindungan utama
+      const localData = localStorage.getItem("ybw_event_state");
+      if (localData) {
+        try {
+          state = JSON.parse(localData);
+        } catch(e){}
+      }
+
+      // 2. Sinkronkan ke Firebase jika ada koneksi
       if (db) {
         db.ref("ybw_event_state").on("value", (snapshot) => {
           const val = snapshot.val();
-          if (val) {
+          if (val && val.peserta && val.peserta.length > 0) {
             state = val;
-            if (!state.partisipasi) state.partisipasi = [];
-            if (!state.peserta) state.peserta = [];
-            if (!state.arena) state.arena = { status: false, slides: [], currentSlideIdx: 0, rules: "", timerSec: 0, answers: [] };
+            localStorage.setItem("ybw_event_state", JSON.stringify(state));
             updateUI();
-          } else {
+          } else if (state.peserta && state.peserta.length > 0) {
             pushStateToFirebase();
           }
         });
@@ -724,25 +752,53 @@
           const emoji = snapshot.val();
           if (emoji) spawnFloatingEmoji(emoji);
         });
-      } else {
-        const local = localStorage.getItem("ybw_event_state");
-        if (local) state = JSON.parse(local);
-        updateUI();
       }
+
+      updateUI();
     }
 
     function pushState() {
+      // Selalu simpan ke LocalStorage agar tidak reset saat reload
+      localStorage.setItem("ybw_event_state", JSON.stringify(state));
+      
       if (db && isFirebaseConnected) {
         db.ref("ybw_event_state").set(state);
-      } else {
-        localStorage.setItem("ybw_event_state", JSON.stringify(state));
-        if (localChannel) localChannel.postMessage({ type: "STATE_UPDATE", payload: state });
       }
+      
+      if (localChannel) {
+        localChannel.postMessage({ type: "STATE_UPDATE", payload: state });
+      }
+      
       updateUI();
     }
 
     function pushStateToFirebase() {
       if (db && isFirebaseConnected) db.ref("ybw_event_state").set(state);
+    }
+
+    function manualSaveData() {
+      pushState();
+      alert("Data berhasil disimpan secara permanen di memori browser dan Firebase!");
+    }
+
+    function resetTestingData() {
+      if (confirm("Reset Hasil Uji Coba?\n\nIni akan mengembalikan semua peserta yang 'Excluded' kembali ke Active Pool dan mengosongkan Rekap Partisipasi.")) {
+        state.partisipasi = [];
+        if (state.peserta) {
+          state.peserta.forEach(p => p.excluded = false);
+        }
+        pushState();
+        alert("Sesi uji coba berhasil di-reset! Semua peserta siap di-spin kembali.");
+      }
+    }
+
+    function resetAllPeserta() {
+      if (confirm("PERINGATAN!\n\nApakah kamu yakin ingin MENGATAS / MENGOSONGKAN SELURUH data peserta? Data yang terhapus tidak bisa dikembalikan.")) {
+        state.peserta = [];
+        state.partisipasi = [];
+        pushState();
+        alert("Seluruh data peserta telah dikosongkan!");
+      }
     }
 
     function updateUI() {
@@ -754,8 +810,8 @@
     }
 
     function renderStats() {
-      document.getElementById("statTotalPeserta").textContent = state.peserta.length;
-      document.getElementById("statPartisipan").textContent = state.partisipasi.length;
+      document.getElementById("statTotalPeserta").textContent = (state.peserta || []).length;
+      document.getElementById("statPartisipan").textContent = (state.partisipasi || []).length;
     }
 
     function setMode(mode) {
@@ -800,7 +856,7 @@
     }
 
     function getFilteredWheelPool() {
-      return state.peserta.filter(p => {
+      return (state.peserta || []).filter(p => {
         if (p.excluded) return false;
         if (p.batch !== activeBatch) return false;
         if (activeSpinFilter === 'L') return p.gender === 'L';
@@ -827,7 +883,7 @@
       const ctx = canvas.getContext("2d");
       const pool = getFilteredWheelPool();
 
-      const allBatch = state.peserta.filter(p => !p.excluded && p.batch === activeBatch);
+      const allBatch = (state.peserta || []).filter(p => !p.excluded && p.batch === activeBatch);
       document.getElementById("badgeCountAll").textContent = allBatch.length;
       document.getElementById("badgeCountL").textContent = allBatch.filter(p => p.gender === 'L').length;
       document.getElementById("badgeCountP").textContent = allBatch.filter(p => p.gender === 'P').length;
@@ -954,6 +1010,7 @@
 
       if (action === 'catat') {
         winners.forEach(w => {
+          if (!state.partisipasi) state.partisipasi = [];
           state.partisipasi.push({
             id: "part-" + Date.now() + Math.random().toString(36).substr(2, 4),
             nama: w.nama,
@@ -992,10 +1049,27 @@
 
     function renderPesertaTable() {
       const tbody = document.getElementById("tableBodyPeserta");
-      const list = state.peserta.filter(p => p.batch === activeBatch);
+      if (!tbody) return;
+
+      const searchNama = (document.getElementById("filterPesertaNama")?.value || "").toLowerCase().trim();
+      const filterGender = document.getElementById("filterPesertaGender")?.value || "all";
+      const filterStatus = document.getElementById("filterPesertaStatus")?.value || "all";
+
+      let list = (state.peserta || []).filter(p => p.batch === activeBatch);
+
+      if (searchNama) {
+        list = list.filter(p => p.nama.toLowerCase().includes(searchNama));
+      }
+      if (filterGender !== "all") {
+        list = list.filter(p => p.gender === filterGender);
+      }
+      if (filterStatus !== "all") {
+        if (filterStatus === "active") list = list.filter(p => !p.excluded);
+        if (filterStatus === "excluded") list = list.filter(p => p.excluded);
+      }
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-500 italic">Belum ada data peserta untuk batch ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-500 italic">Tidak ada data peserta yang cocok dengan filter.</td></tr>`;
         return;
       }
 
@@ -1018,6 +1092,70 @@
       `).join('');
     }
 
+    function handleImportPeserta(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        try {
+          if (file.name.endsWith(".json")) {
+            const data = JSON.parse(content);
+            if (Array.isArray(data)) {
+              state.peserta = data;
+              pushState();
+            }
+          } else {
+            const lines = content.split("\n");
+            const newPeserta = [];
+            
+            lines.forEach((line, i) => {
+              if (i === 0 || !line.trim()) return;
+              
+              const cleanLine = line.replace(/"/g, '').trim();
+              if (!cleanLine) return;
+
+              const delimiter = cleanLine.includes(';') ? ';' : ',';
+              const parts = cleanLine.split(delimiter).map(s => s.trim());
+              
+              const nama = parts[0];
+              let genderRaw = (parts[1] || 'L').toUpperCase();
+              let batchRaw = (parts[2] || activeBatch).toLowerCase();
+
+              const gender = genderRaw.startsWith('P') ? 'P' : 'L';
+
+              let batch = 'batch1';
+              if (batchRaw.includes('2')) {
+                batch = 'batch2';
+              }
+
+              if (nama) {
+                newPeserta.push({
+                  id: "p-" + Date.now() + i + Math.random().toString(36).substr(2, 3),
+                  nama: nama,
+                  gender: gender,
+                  batch: batch,
+                  excluded: false
+                });
+              }
+            });
+
+            if (newPeserta.length > 0) {
+              state.peserta = newPeserta;
+              pushState();
+              alert(`Berhasil mengimpor ${newPeserta.length} data peserta! Data tersimpan otomatis.`);
+            } else {
+              alert("Tidak ada data peserta yang berhasil dibaca.");
+            }
+          }
+        } catch (err) {
+          alert("Gagal membaca file import: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
     function openModalTambahPeserta() {
       document.getElementById("modalPesertaTitle").textContent = "Tambah Peserta Baru";
       document.getElementById("editPesertaId").value = "";
@@ -1038,6 +1176,8 @@
       const batch = document.getElementById("formPesertaBatch").value;
 
       if (!nama) return alert("Isi nama peserta!");
+
+      if (!state.peserta) state.peserta = [];
 
       if (id) {
         const idx = state.peserta.findIndex(p => p.id === id);
@@ -1075,74 +1215,6 @@
       }
     }
 
-function handleImportPeserta(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const content = e.target.result;
-    try {
-      if (file.name.endsWith(".json")) {
-        const data = JSON.parse(content);
-        if (Array.isArray(data)) {
-          state.peserta = data;
-          pushState();
-        }
-      } else {
-        const lines = content.split("\n");
-        const newPeserta = [];
-        
-        lines.forEach((line, i) => {
-          if (i === 0 || !line.trim()) return; // Skip header & baris kosong
-          
-          // Hapus tanda petik ganda bawaan Excel
-          const cleanLine = line.replace(/"/g, '').trim();
-          if (!cleanLine) return;
-
-          // Otomatis deteksi pemisah titik koma (;) atau koma (,)
-          const delimiter = cleanLine.includes(';') ? ';' : ',';
-          const parts = cleanLine.split(delimiter).map(s => s.trim());
-          
-          const nama = parts[0];
-          let genderRaw = (parts[1] || 'L').toUpperCase();
-          let batchRaw = (parts[2] || activeBatch).toLowerCase();
-
-          // Normalisasi Gender (L/P)
-          const gender = genderRaw.startsWith('P') ? 'P' : 'L';
-
-          // Normalisasi Batch ("Batch 1", "batch 1", atau "batch1" -> "batch1")
-          let batch = 'batch1';
-          if (batchRaw.includes('2')) {
-            batch = 'batch2';
-          }
-
-          if (nama) {
-            newPeserta.push({
-              id: "p-" + Date.now() + i + Math.random().toString(36).substr(2, 3),
-              nama: nama,
-              gender: gender,
-              batch: batch,
-              excluded: false
-            });
-          }
-        });
-
-        if (newPeserta.length > 0) {
-          state.peserta = newPeserta;
-          pushState();
-          alert(`Berhasil mengimpor ${newPeserta.length} data peserta!`);
-        } else {
-          alert("Tidak ada data peserta yang berhasil dibaca.");
-        }
-      }
-    } catch (err) {
-      alert("Gagal membaca file import: " + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
     function exportDataPeserta() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.peserta, null, 2));
       const downloadAnchor = document.createElement('a');
@@ -1155,6 +1227,8 @@ function handleImportPeserta(event) {
 
     function renderPartisipasiTable() {
       const tbody = document.getElementById("tableBodyPartisipasi");
+      if (!tbody) return;
+
       const list = state.partisipasi || [];
 
       if (list.length === 0) {
@@ -1205,7 +1279,7 @@ function handleImportPeserta(event) {
 
     function exportDataPartisipasi() {
       let csvContent = "data:text/csv;charset=utf-8,No,Nama Peserta,Batch,Hari & Tanggal,Sesi Game,Status Partisipasi,Status Hadiah\n";
-      state.partisipasi.forEach((item, idx) => {
+      (state.partisipasi || []).forEach((item, idx) => {
         csvContent += `${idx + 1},"${item.nama}","${item.batch}","${item.date}","${item.sesi}","${item.statusPartisipasi}","${item.statusHadiah}"\n`;
       });
       const encodedUri = encodeURI(csvContent);
@@ -1286,6 +1360,8 @@ function handleImportPeserta(event) {
       const label = document.getElementById("labelArenaStatus");
       const activeDisplay = document.getElementById("arenaActiveDisplay");
       const offDisplay = document.getElementById("arenaOffDisplay");
+
+      if (!toggle) return;
 
       toggle.checked = state.arena.status;
       label.textContent = state.arena.status ? "STATUS: ON" : "STATUS: OFF";
