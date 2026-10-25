@@ -82,9 +82,1624 @@
           <div class="text-gray-300 font-mono" id="realtimeClock">00:00:00 WIB</div>
         </div>
 
-        <button onclick="openQRModal()" class="admin-only p-2 bg-uii-navy hover:bg-uii-border text-uii-gold rounded-lg border border-uii-border transition cursor-pointer z-10 hidden" title="Tampilkan QR Code Akses Peserta">
+        <button onclick="openQRModal()" class="admin-only p-2 bg-uii-navy hover:bg-uii-border text-uii-gold rounded-lg border border-uii-border transition cursor-pointer z-10" style="display: none;" title="Tampilkan QR Code Akses Peserta">
           <i class="fa-solid fa-qrcode text-lg"></i>
         </button>
 
         <div class="bg-uii-navy p-1 rounded-xl border border-uii-border flex items-center z-10">
-          <button id="btnModeAdmin" onclick="setMode('admin')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200
+          <button id="btnModeAdmin" onclick="setMode('admin')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white cursor-pointer">
+            <i class="fa-solid fa-user-shield"></i> Mode Admin
+          </button>
+          <button id="btnModePeserta" onclick="setMode('peserta')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow cursor-pointer">
+            <i class="fa-solid fa-users"></i> Mode Peserta
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- NAV TAB BAR -->
+  <nav class="bg-uii-navy border-b border-uii-border px-4 py-2 sticky top-[73px] z-30">
+    <div class="max-w-7xl mx-auto flex items-center justify-start overflow-x-auto gap-2 no-scrollbar">
+      <button onclick="switchTab('spin')" id="tabBtn-spin" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 bg-uii-gold text-uii-navy cursor-pointer">
+        <i class="fa-solid fa-dharmachakra"></i> Spin Wheel
+      </button>
+      <button onclick="switchTab('data')" id="tabBtn-data" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 text-gray-400 hover:bg-uii-card hover:text-white cursor-pointer">
+        <i class="fa-solid fa-address-book"></i> Data Peserta
+      </button>
+      <button onclick="switchTab('partisipasi')" id="tabBtn-partisipasi" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 text-gray-400 hover:bg-uii-card hover:text-white cursor-pointer">
+        <i class="fa-solid fa-clipboard-check"></i> Partisipasi Peserta
+      </button>
+      <button onclick="switchTab('arena')" id="tabBtn-arena" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 text-gray-400 hover:bg-uii-card hover:text-white cursor-pointer">
+        <i class="fa-solid fa-gamepad"></i> Arena
+      </button>
+      <button onclick="switchTab('interaktif')" id="tabBtn-interaktif" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 text-gray-400 hover:bg-uii-card hover:text-white cursor-pointer">
+        <i class="fa-solid fa-comments"></i> Interaktif
+      </button>
+    </div>
+  </nav>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto w-full p-4 md:p-6 flex-1 flex flex-col">
+
+    <!-- TAB 1: SPIN WHEEL -->
+    <section id="tab-spin" class="tab-content space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <div class="lg:col-span-7 bg-uii-card p-6 rounded-2xl border border-uii-border flex flex-col items-center justify-center relative shadow-2xl">
+          <div class="relative w-full max-w-[420px] aspect-square flex items-center justify-center my-2">
+            <div class="absolute -top-3 z-20 text-uii-gold text-4xl drop-shadow-[0_4px_10px_rgba(245,184,0,0.5)]">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+            <canvas id="wheelCanvas" width="450" height="450" class="w-full h-full rounded-full transition-transform duration-500"></canvas>
+            <div class="absolute w-16 h-16 bg-uii-navy border-4 border-uii-gold rounded-full flex items-center justify-center shadow-lg z-10 pointer-events-none">
+              <i class="fa-solid fa-star text-uii-gold text-xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4">
+            <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-filter text-uii-gold"></i> Filter Undian
+            </h3>
+
+            <div class="pb-3 border-b border-uii-border">
+              <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">
+                <i class="fa-solid fa-layer-group text-uii-gold mr-1"></i> Pilih Batch Peserta:
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" onclick="setSpinBatchFilter('batch1')" id="btnSpinBatch1" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-gold bg-uii-gold text-uii-navy transition cursor-pointer">Batch 1</button>
+                <button type="button" onclick="setSpinBatchFilter('batch2')" id="btnSpinBatch2" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">Batch 2</button>
+                <button type="button" onclick="setSpinBatchFilter('all')" id="btnSpinBatchAll" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">Semua Batch</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2.5">
+              <label onclick="setSpinFilter('all')" class="spin-filter-card flex items-center justify-between p-3.5 rounded-xl border border-uii-gold bg-uii-goldLight cursor-pointer transition">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="spinFilter" value="all" checked class="text-uii-gold focus:ring-0">
+                  <div>
+                    <div class="font-bold text-sm text-white">Peserta Keseluruhan</div>
+                    <div class="text-xs text-gray-400">Daftar Peserta Keseluruhan</div>
+                  </div>
+                </div>
+                <span id="badgeCountAll" class="text-xs bg-uii-navy px-2.5 py-1 rounded-full border border-uii-border text-uii-gold font-bold">0</span>
+              </label>
+
+              <label onclick="setSpinFilter('L')" class="spin-filter-card flex items-center justify-between p-3.5 rounded-xl border border-uii-border bg-uii-navy cursor-pointer hover:border-gray-600 transition">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="spinFilter" value="L" class="text-uii-gold focus:ring-0">
+                  <div>
+                    <div class="font-bold text-sm text-white">Peserta Laki-Laki</div>
+                    <div class="text-xs text-gray-400">Daftar Peserta Laki-Laki</div>
+                  </div>
+                </div>
+                <span id="badgeCountL" class="text-xs bg-uii-navy px-2.5 py-1 rounded-full border border-uii-border text-gray-300 font-bold">0</span>
+              </label>
+
+              <label onclick="setSpinFilter('P')" class="spin-filter-card flex items-center justify-between p-3.5 rounded-xl border border-uii-border bg-uii-navy cursor-pointer hover:border-gray-600 transition">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="spinFilter" value="P" class="text-uii-gold focus:ring-0">
+                  <div>
+                    <div class="font-bold text-sm text-white">Peserta Perempuan</div>
+                    <div class="text-xs text-gray-400">Daftar Peserta Perempuan</div>
+                  </div>
+                </div>
+                <span id="badgeCountP" class="text-xs bg-uii-navy px-2.5 py-1 rounded-full border border-uii-border text-gray-300 font-bold">0</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4" style="display: none;">
+            <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Undian MC
+            </h3>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-400 mb-1">Nama Sesi Game</label>
+              <input type="text" id="inputSesiGame" value="Ice Breaking - Session 1" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-uii-gold">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-400 mb-1">Jumlah Peserta Di-Spin</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="inputSpinCount" value="1" min="1" max="10" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white font-bold text-center focus:outline-none focus:border-uii-gold">
+                <div class="flex gap-1">
+                  <button onclick="adjustSpinCount(-1)" class="px-3 py-2.5 bg-uii-navy border border-uii-border hover:bg-uii-border rounded-xl text-white font-bold cursor-pointer">-</button>
+                  <button onclick="adjustSpinCount(1)" class="px-3 py-2.5 bg-uii-navy border border-uii-border hover:bg-uii-border rounded-xl text-white font-bold cursor-pointer">+</button>
+                </div>
+              </div>
+            </div>
+
+            <button id="btnSpin" onclick="triggerSpinWheel()" class="w-full py-4 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-black text-xl rounded-xl shadow-lg shadow-yellow-500/20 transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-rotate text-2xl"></i> PUTAR
+            </button>
+          </div>
+
+          <div class="peserta-only bg-uii-card p-5 rounded-2xl border border-uii-border text-center space-y-2">
+            <i class="fa-solid fa-dharmachakra text-3xl text-uii-gold mb-1 animate-spin" style="animation-duration: 8s;"></i>
+            <h4 class="text-sm font-bold text-white">Live Spin Wheel Display</h4>
+            <p class="text-xs text-gray-400 italic">Roda undian dikendalikan langsung oleh MC di panggung. Hasil putaran akan muncul secara otomatis di layar kamu.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: DATA PESERTA -->
+    <section id="tab-data" class="tab-content space-y-6" style="display: none;">
+      <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users-gear text-uii-gold"></i> Kelola Data Peserta</h2>
+            <p class="text-xs text-gray-400">Daftar nama peserta aktif per Batch</p>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="openModalTambahPeserta()" class="admin-only px-3.5 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;"><i class="fa-solid fa-plus"></i> Tambah Peserta</button>
+            <label class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl cursor-pointer transition flex items-center gap-1.5" style="display: none;">
+              <i class="fa-solid fa-file-import text-uii-gold"></i> Import CSV
+              <input type="file" id="fileImportPeserta" accept=".csv,.json" class="hidden" onchange="handleImportPeserta(event)">
+            </label>
+            <button onclick="manualSaveData()" class="admin-only px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Simpan Permanen"><i class="fa-solid fa-floppy-disk"></i> Simpan Data</button>
+            <button onclick="resetTestingData()" class="admin-only px-3.5 py-2 bg-amber-600/80 hover:bg-amber-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Reset Hasil Spin Saja"><i class="fa-solid fa-rotate-left"></i> Reset Sesi Uji Coba</button>
+            <button onclick="resetAllPeserta()" class="admin-only px-3.5 py-2 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer" style="display: none;" title="Kosongkan Semua Peserta"><i class="fa-solid fa-trash-can"></i> Hapus Semua Peserta</button>
+          </div>
+        </div>
+
+        <div class="flex border-b border-uii-border gap-4">
+          <button onclick="filterBatchData('batch1')" id="batchTab-1" class="pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-calendar-day"></i> Batch 1 (27 - 28 Oktober 2026)</button>
+          <button onclick="filterBatchData('batch2')" id="batchTab-2" class="pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-calendar-day"></i> Batch 2 (29 - 30 Oktober 2026)</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-uii-navy p-3.5 rounded-xl border border-uii-border">
+          <div>
+            <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-magnifying-glass text-uii-gold mr-1"></i> Cari Nama Peserta</label>
+            <input type="text" id="filterPesertaNama" oninput="renderPesertaTable()" placeholder="Ketik nama..." class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-uii-gold">
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-venus-mars text-uii-gold mr-1"></i> Filter Gender</label>
+            <select id="filterPesertaGender" onchange="renderPesertaTable()" class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-uii-gold">
+              <option value="all">Semua Gender</option>
+              <option value="L">Laki-Laki (L)</option>
+              <option value="P">Perempuan (P)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-shield-halved text-uii-gold mr-1"></i> Filter Status Pool</label>
+            <select id="filterPesertaStatus" onchange="renderPesertaTable()" class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-uii-gold">
+              <option value="all">Semua Status</option>
+              <option value="active">Active Pool (Bisa Terundi)</option>
+              <option value="excluded">Excluded (Sudah Terundi / Gugur)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-gray-300">
+            <thead class="bg-uii-navy text-xs uppercase text-uii-gold border-b border-uii-border">
+              <tr>
+                <th class="px-4 py-3 rounded-l-lg">No</th>
+                <th class="px-4 py-3">Nama Lengkap</th>
+                <th class="px-4 py-3">Gender</th>
+                <th class="px-4 py-3">Batch</th>
+                <th class="px-4 py-3 text-center">Status Pool</th>
+                <th class="px-4 py-3 text-right rounded-r-lg admin-only" style="display: none;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBodyPeserta" class="divide-y divide-uii-border/50"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: PARTISIPASI PESERTA -->
+    <section id="tab-partisipasi" class="tab-content space-y-6" style="display: none;">
+      <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-award text-uii-gold"></i> Rekap Partisipasi & Hadiah Peserta</h2>
+            <p class="text-xs text-gray-400">Catatan partisipasi game & pemberian hadiah cuma-cuma</p>
+          </div>
+          <button onclick="exportDataPartisipasi()" class="admin-only px-3.5 py-2 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border font-medium text-xs rounded-xl transition flex items-center gap-1.5 self-start cursor-pointer" style="display: none;">
+            <i class="fa-solid fa-download text-uii-gold"></i> Export Rekap
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-gray-300">
+            <thead class="bg-uii-navy text-xs uppercase text-uii-gold border-b border-uii-border">
+              <tr>
+                <th class="px-4 py-3 rounded-l-lg">No</th>
+                <th class="px-4 py-3">Nama Peserta</th>
+                <th class="px-4 py-3">Batch</th>
+                <th class="px-4 py-3">Hari & Tanggal</th>
+                <th class="px-4 py-3">Sesi Game</th>
+                <th class="px-4 py-3">Status Partisipasi</th>
+                <th class="px-4 py-3">Status Hadiah</th>
+                <th class="px-4 py-3 text-right rounded-r-lg admin-only" style="display: none;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBodyPartisipasi" class="divide-y divide-uii-border/50"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: ARENA -->
+    <section id="tab-arena" class="tab-content space-y-6 relative" style="display: none;">
+      <!-- OVERLAY FLOATING EMOJI DI ARENA -->
+      <div id="arenaEmojiOverlay" class="pointer-events-none absolute inset-0 z-30 overflow-hidden"></div>
+
+      <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4 z-10 relative" style="display: none;">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-uii-border">
+          <div class="flex items-center gap-3">
+            <h3 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Sesi Arena</h3>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="toggleArenaStatus" class="sr-only peer" onchange="toggleArenaSession(this.checked)">
+              <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              <span id="labelArenaStatus" class="ml-2 text-xs font-bold text-gray-400">STATUS: OFF</span>
+            </label>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-bold text-gray-400">Pilih Quiz:</span>
+            <select id="selectQuizSet" onchange="switchQuizSet(this.value)" class="bg-uii-navy border border-uii-border text-xs text-white rounded-lg px-3 py-1.5 focus:outline-none focus:border-uii-gold font-bold"></select>
+            <button onclick="addNewQuizSet()" class="px-3 py-1.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition cursor-pointer"><i class="fa-solid fa-plus"></i> Quiz Baru</button>
+            <button onclick="deleteCurrentQuizSet()" class="px-2.5 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div class="md:col-span-8 space-y-2">
+            <label class="block text-xs font-medium text-gray-400">Aturan Game / Instructions (Rules):</label>
+            <input type="text" id="inputArenaRules" placeholder="Contoh: Tebak judul gambar di bawah ini dengan cepat via tab Interaktif!" class="w-full bg-uii-navy border border-uii-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-uii-gold" onchange="updateArenaRules(this.value)">
+          </div>
+          <div class="md:col-span-4 flex items-end gap-2">
+            <div class="flex-1">
+              <label class="block text-xs font-medium text-gray-400 mb-1">Timer Detik:</label>
+              <input type="number" id="inputArenaTimerSec" value="30" class="w-full bg-uii-navy border border-uii-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-uii-gold">
+            </div>
+            <button onclick="startArenaTimer()" class="px-4 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition h-[34px] cursor-pointer">Start Timer</button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-uii-border">
+          <label class="px-3.5 py-1.5 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border text-xs rounded-lg cursor-pointer transition flex items-center gap-1.5">
+            <i class="fa-solid fa-cloud-arrow-up text-uii-gold"></i> Upload Slide Gambar Ke Quiz Ini
+            <input type="file" id="inputSlideArena" accept="image/*" multiple class="hidden" onchange="handleUploadSlideArena(event)">
+          </label>
+          <button onclick="clearArenaSlides()" class="px-3 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer"><i class="fa-solid fa-trash-can"></i> Reset Slide Gambar</button>
+        </div>
+      </div>
+
+      <div id="arenaActiveDisplay" class="grid grid-cols-1 lg:grid-cols-12 gap-6 z-10 relative">
+        <div class="lg:col-span-8 bg-uii-card p-6 rounded-2xl border border-uii-border flex flex-col space-y-4">
+          <div class="flex items-center justify-between border-b border-uii-border pb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-uii-gold uppercase tracking-wider">Slide Game:</span>
+              <span id="arenaSlideNum" class="text-xs bg-uii-navy px-2.5 py-1 rounded-full text-white font-mono border border-uii-border">0 / 0</span>
+              <span id="activeQuizTitleBadge" class="text-xs bg-uii-goldLight text-uii-gold font-bold px-2.5 py-0.5 rounded-full border border-uii-gold/30">Quiz 1</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-hourglass-half text-uii-gold animate-pulse"></i>
+              <span id="arenaTimerDisplay" class="font-mono text-xl font-extrabold text-uii-gold">00:00</span>
+            </div>
+          </div>
+
+          <div class="relative w-full aspect-video bg-uii-navy rounded-xl border border-uii-border overflow-hidden flex items-center justify-center group">
+            <img id="arenaImageDisplay" src="" alt="Arena Game Slide" class="max-w-full max-h-full object-contain hidden">
+            <div id="arenaImagePlaceholder" class="text-center p-8 text-gray-500">
+              <i class="fa-solid fa-images text-5xl mb-3 text-uii-border"></i>
+              <p class="text-sm">Belum ada slide gambar game yang diunggah untuk quiz ini.</p>
+            </div>
+
+            <div class="admin-only absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-between opacity-0 group-hover:opacity-100 transition" style="display: none;">
+              <button onclick="prevArenaSlide()" class="px-3 py-1.5 bg-uii-navy/80 hover:bg-uii-gold hover:text-uii-navy text-white text-xs font-bold rounded-lg border border-uii-border transition cursor-pointer"><i class="fa-solid fa-chevron-left"></i> Prev Slide</button>
+              <button onclick="nextArenaSlide()" class="px-3 py-1.5 bg-uii-navy/80 hover:bg-uii-gold hover:text-uii-navy text-white text-xs font-bold rounded-lg border border-uii-border transition cursor-pointer">Next Slide <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <div class="bg-uii-navy p-3.5 rounded-xl border border-uii-border flex items-start gap-3">
+            <i class="fa-solid fa-circle-info text-uii-gold text-base mt-0.5"></i>
+            <div>
+              <div class="text-xs font-bold text-gray-300 uppercase">Aturan Sesi:</div>
+              <div id="arenaRulesText" class="text-xs text-gray-400 italic">Belum ada instruksi khusus dari MC.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 bg-uii-card p-6 rounded-2xl border border-uii-border flex flex-col h-[500px]">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-uii-gold"></i> Live Responses</span>
+            <button onclick="clearArenaAnswers()" class="admin-only text-[10px] text-gray-400 hover:text-rose-400 underline cursor-pointer" style="display: none;">Clear</button>
+          </h3>
+          <div id="arenaAnswersList" class="flex-1 overflow-y-auto space-y-2 pr-1">
+            <div class="text-center py-12 text-gray-500 text-xs italic">Belum ada jawaban masuk dari peserta...</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="arenaOffDisplay" class="bg-uii-card p-12 rounded-2xl border border-uii-border text-center space-y-4 z-10 relative" style="display: none;">
+        <div class="w-20 h-20 bg-uii-navy border border-uii-border rounded-full flex items-center justify-center mx-auto text-uii-gold text-3xl shadow-inner">
+          <i class="fa-solid fa-mug-hot"></i>
+        </div>
+        <p class="text-lg md:text-xl font-bold text-gray-200 leading-relaxed">
+          Belum Ada Sesi Ini Untuk Anda.<br>
+          <span class="text-uii-gold">Kembalikan Fokus Ke Depan Dulu, Ya! 😊</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 5: INTERAKTIF -->
+    <section id="tab-interaktif" class="tab-content space-y-6" style="display: none;">
+      <div class="max-w-2xl mx-auto bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-paper-plane text-uii-gold"></i> Form Response Peserta</h2>
+          <p class="text-xs text-gray-400">Kirimkan respon atau jawaban kamu langsung ke layar MC Panggung</p>
+        </div>
+
+        <form onsubmit="submitInteractiveAnswer(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-400 mb-1">Nama Peserta</label>
+            <input type="text" id="interaktifNama" required placeholder="Masukkan nama lengkap kamu..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold">
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-400 mb-1">Jawaban / Tanggapan</label>
+            <textarea id="interaktifJawaban" required rows="3" placeholder="Tulis jawaban kamu di sini..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold resize-none"></textarea>
+          </div>
+
+          <div class="bg-uii-navy p-3.5 rounded-xl border border-uii-border flex items-center justify-between">
+            <span class="text-xs font-medium text-gray-400 flex items-center gap-2"><i class="fa-solid fa-stopwatch text-uii-gold"></i> Timer Sesi Active:</span>
+            <span id="interaktifTimerDisplay" class="font-mono text-base font-bold text-uii-gold">-- : --</span>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-sm rounded-xl transition shadow-lg shadow-yellow-500/10 flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Jawaban
+          </button>
+        </form>
+
+        <div class="pt-4 border-t border-uii-border space-y-3">
+          <label class="block text-xs font-medium text-gray-400">Kirim Emoji Reaksi ke Layar Arena:</label>
+          <div class="flex items-center justify-center gap-4 flex-wrap">
+            <button type="button" onclick="sendEmojiReaction('🔥')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🔥</button>
+            <button type="button" onclick="sendEmojiReaction('👏')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">👏</button>
+            <button type="button" onclick="sendEmojiReaction('❤️')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">❤️</button>
+            <button type="button" onclick="sendEmojiReaction('💡')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">💡</button>
+            <button type="button" onclick="sendEmojiReaction('🎉')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🎉</button>
+            <button type="button" onclick="sendEmojiReaction('🤩')" class="text-3xl p-3 bg-uii-navy hover:scale-125 border border-uii-border rounded-xl transition transform active:scale-95 cursor-pointer">🤩</button>
+          </div>
+        </div>
+
+        <div class="admin-only bg-uii-navy p-4 rounded-xl border border-uii-border space-y-3" style="display: none;">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider"><i class="fa-solid fa-stopwatch text-uii-gold mr-1"></i> Audio Timer Synth (MC)</h3>
+          <div class="flex items-center gap-2">
+            <input type="number" id="inputSynthTimerSec" value="10" min="1" max="300" class="w-full bg-uii-card border border-uii-border rounded-lg px-3 py-1.5 text-xs text-white">
+            <button onclick="startSynthTimer()" class="px-4 py-1.5 bg-uii-gold text-uii-navy font-bold text-xs rounded-lg whitespace-nowrap">Count</button>
+          </div>
+          <div id="synthTimerDisplay" class="font-mono text-xl font-bold text-uii-gold text-center">00:10</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- Spin Result Modal -->
+  <div id="modalSpinResult" onclick="if(event.target === this) closeSpinResultModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-uii-card border border-uii-border w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-6">
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 bg-uii-goldLight border border-uii-gold rounded-full flex items-center justify-center mx-auto text-uii-gold text-2xl"><i class="fa-solid fa-bullhorn"></i></div>
+        <h2 class="text-xl font-extrabold text-white">Peserta Terpilih Berpartisipasi</h2>
+        <p class="text-xs text-gray-400">Hasil putaran undian kuis/game:</p>
+      </div>
+
+      <div id="listSelectedNames" class="bg-uii-navy border border-uii-border rounded-xl p-4 max-h-48 overflow-y-auto space-y-2"></div>
+
+      <!-- Khusus Admin: Tombol Mitigasi -->
+      <div class="admin-only space-y-2 pt-2" style="display: none;">
+        <button onclick="handleSpinMitigation('catat')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-check-circle"></i> Catat Partisipasi (Simpan ke Rekap)</button>
+        <button onclick="handleSpinMitigation('gugur')" class="w-full py-3 bg-rose-900/60 hover:bg-rose-800 border border-rose-800 text-rose-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-user-slash"></i> Gugur / Tidak Hadir (Exclude dari Pool)</button>
+        <button onclick="handleSpinMitigation('kembalikan')" class="w-full py-3 bg-uii-navy hover:bg-uii-border border border-uii-border text-gray-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-rotate-left"></i> Kembalikan ke Pool (Dapat Terundi Kembali)</button>
+      </div>
+
+      <!-- Khusus Peserta: Tombol Tutup Saja -->
+      <div id="btnModalClosePeserta" class="pt-2">
+        <button onclick="closeSpinResultModal()" class="w-full py-3 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-xl transition cursor-pointer">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div id="modalQR" onclick="if(event.target === this) closeQRModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-uii-card border border-uii-border w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-5 text-center">
+      <div class="flex items-center justify-between border-b border-uii-border pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-qrcode text-uii-gold"></i> QR Code Akses Peserta</h3>
+        <button onclick="closeQRModal()" class="text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl inline-block shadow-inner mx-auto" id="qrcodeContainer"></div>
+
+      <div>
+        <label class="block text-xs font-medium text-gray-400 mb-1">URL Website / GitHub Pages:</label>
+        <input type="text" id="inputQRUrl" value="" onchange="generateQRCode(this.value)" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3 py-2 text-xs text-white text-center focus:outline-none focus:border-uii-gold">
+      </div>
+      <p class="text-[11px] text-gray-400 italic">Minta peserta meng-scan QR Code ini dari HP masing-masing.</p>
+    </div>
+  </div>
+
+  <!-- Modal Tambah/Edit Peserta -->
+  <div id="modalPesertaForm" onclick="if(event.target === this) closeModalPeserta()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-uii-card border border-uii-border w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-uii-border pb-3">
+        <h3 id="modalPesertaTitle" class="text-sm font-bold text-white">Tambah Peserta Baru</h3>
+        <button onclick="closeModalPeserta()" class="text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <input type="hidden" id="editPesertaId">
+      <div>
+        <label class="block text-xs font-medium text-gray-400 mb-1">Nama Lengkap</label>
+        <input type="text" id="formPesertaNama" required class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-uii-gold">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-400 mb-1">Gender</label>
+        <select id="formPesertaGender" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-uii-gold">
+          <option value="L">Laki-Laki (L)</option>
+          <option value="P">Perempuan (P)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-400 mb-1">Batch Sesi</label>
+        <select id="formPesertaBatch" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-uii-gold">
+          <option value="batch1">Batch 1 (27 - 28 Oktober 2026)</option>
+          <option value="batch2">Batch 2 (29 - 30 Oktober 2026)</option>
+        </select>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="closeModalPeserta()" class="px-4 py-2 bg-uii-navy border border-uii-border hover:bg-uii-border text-gray-300 text-xs font-bold rounded-xl cursor-pointer">Batal</button>
+        <button onclick="savePesertaData()" class="px-4 py-2 bg-uii-gold hover:bg-uii-goldHover text-uii-navy text-xs font-bold rounded-xl cursor-pointer">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT REALTIME -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdKynFAaq_etXZoC_PC6TVzJ8-_8h5cqI",
+      authDomain: "ybwleadership-ac.firebaseapp.com",
+      projectId: "ybwleadership-ac",
+      storageBucket: "ybwleadership-ac.firebasestorage.app",
+      messagingSenderId: "587774705632",
+      appId: "1:587774705632:web:2f5ea21c3fbf8aba933585",
+      measurementId: "G-YRKXE1H2WB",
+      databaseURL: "https://ybwleadership-ac-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    let db = null;
+    let isFirebaseConnected = false;
+
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+      
+      const connectedRef = db.ref(".info/connected");
+      connectedRef.on("value", (snap) => {
+        const dot = document.getElementById("firebaseStatus");
+        if (dot) {
+          if (snap.val() === true) {
+            isFirebaseConnected = true;
+            dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]";
+            dot.title = "Terhubung ke Firebase Realtime Database";
+          } else {
+            isFirebaseConnected = false;
+            dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-red-500";
+            dot.title = "Koneksi Terputus (Local Fallback)";
+          }
+        }
+      });
+    } catch (e) {
+      console.warn("Firebase Init Error:", e);
+    }
+
+    let localChannel = null;
+    try { localChannel = new BroadcastChannel("ybw_event_channel"); } catch(e){}
+
+    const ADMIN_PIN = "1008DIA";
+    let currentMode = 'peserta';
+    let activeBatch = 'batch1';
+    let spinBatchFilter = 'batch1';
+    let activeSpinFilter = 'all';
+    let isSpinning = false;
+    let wheelRotation = 0;
+    let lastProcessedSpinTimestamp = Date.now();
+
+    let state = {
+      peserta: [],
+      partisipasi: [],
+      arena: {
+        status: false,
+        activeQuizId: "q1",
+        quizzes: [
+          {
+            id: "q1",
+            title: "Quiz 1 - Tebak Gambar",
+            slides: [],
+            currentSlideIdx: 0,
+            rules: "Tebak gambar di atas dengan cepat!",
+            timerSec: 0,
+            answers: []
+          }
+        ]
+      },
+      lastWinners: []
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      initDataSync();
+      setMode('peserta');
+      renderWheel();
+
+      const qrInput = document.getElementById("inputQRUrl");
+      if (qrInput) {
+        qrInput.value = window.location.href;
+        generateQRCode(window.location.href);
+      }
+
+      if (localChannel) {
+        localChannel.onmessage = (msg) => {
+          if (msg.data && msg.data.type === "STATE_UPDATE") {
+            mergeIncomingState(msg.data.payload);
+          } else if (msg.data && msg.data.type === "EMOJI") {
+            spawnFloatingEmoji(msg.data.emoji);
+          }
+        };
+      }
+    });
+
+    function updateClock() {
+      const el = document.getElementById("realtimeClock");
+      if (el) {
+        const now = new Date();
+        el.textContent = now.toLocaleTimeString('id-ID', { hour12: false }) + " WIB";
+      }
+    }
+
+    function initDataSync() {
+      const localData = localStorage.getItem("ybw_event_state");
+      if (localData) {
+        try {
+          state = JSON.parse(localData);
+          ensureStateStructure();
+        } catch(e){}
+      }
+
+      if (db) {
+        // 1. Sync State
+        db.ref("ybw_event_state").on("value", (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            mergeIncomingState(val);
+          } else if (currentMode === 'admin') {
+            pushStateToFirebase();
+          }
+        });
+
+        // 2. Sync Spin
+        db.ref("ybw_spin_event").on("value", (snapshot) => {
+          const spinData = snapshot.val();
+          if (spinData && spinData.targetRotation && spinData.timestamp) {
+            if (spinData.timestamp > lastProcessedSpinTimestamp && !isSpinning) {
+              lastProcessedSpinTimestamp = spinData.timestamp;
+              animateWheelTo(spinData.targetRotation, spinData.winners);
+            }
+          }
+        });
+
+        // 3. Sync Jawaban
+        db.ref("ybw_answers").on("child_added", (snapshot) => {
+          const newAns = snapshot.val();
+          if (newAns && newAns.id) {
+            const quiz = getActiveQuiz();
+            if (!quiz.answers) quiz.answers = [];
+            if (!quiz.answers.some(a => a && a.id === newAns.id)) {
+              quiz.answers.unshift(newAns);
+              renderArenaAnswersList();
+            }
+          }
+        });
+
+        // 4. Sync Emoji
+        db.ref("ybw_emojis").on("child_added", (snapshot) => {
+          const emoji = snapshot.val();
+          if (emoji) spawnFloatingEmoji(emoji);
+        });
+      }
+
+      updateUI();
+    }
+
+    function mergeIncomingState(val) {
+      if (!val) return;
+      const localSlides = {};
+      if (state.arena && state.arena.quizzes) {
+        state.arena.quizzes.forEach(q => { if(q) localSlides[q.id] = q.slides || []; });
+      }
+
+      state.peserta = (val.peserta || []).filter(p => p !== null);
+      state.partisipasi = (val.partisipasi || []).filter(p => p !== null);
+      if (val.arena) {
+        state.arena.status = val.arena.status || false;
+        state.arena.activeQuizId = val.arena.activeQuizId || "q1";
+        if (val.arena.quizzes) {
+          state.arena.quizzes = val.arena.quizzes.map(q => ({
+            ...q,
+            slides: localSlides[q.id] || q.slides || [],
+            answers: q.answers || []
+          }));
+        }
+      }
+      ensureStateStructure();
+      localStorage.setItem("ybw_event_state", JSON.stringify(state));
+      updateUI();
+    }
+
+    function ensureStateStructure() {
+      if (!Array.isArray(state.peserta)) state.peserta = [];
+      state.peserta = state.peserta.filter(p => p !== null);
+
+      if (!Array.isArray(state.partisipasi)) state.partisipasi = [];
+      state.partisipasi = state.partisipasi.filter(p => p !== null);
+
+      if (!state.arena) {
+        state.arena = {
+          status: false,
+          activeQuizId: "q1",
+          quizzes: [{ id: "q1", title: "Quiz 1 - Tebak Gambar", slides: [], currentSlideIdx: 0, rules: "", timerSec: 0, answers: [] }]
+        };
+      }
+      if (!Array.isArray(state.arena.quizzes) || state.arena.quizzes.length === 0) {
+        state.arena.quizzes = [{ id: "q1", title: "Quiz 1 - Tebak Gambar", slides: [], currentSlideIdx: 0, rules: "", timerSec: 0, answers: [] }];
+        state.arena.activeQuizId = "q1";
+      }
+
+      state.arena.quizzes.forEach(q => {
+        if (q) {
+          if (!Array.isArray(q.slides)) q.slides = [];
+          if (!Array.isArray(q.answers)) q.answers = [];
+        }
+      });
+    }
+
+    function getActiveQuiz() {
+      ensureStateStructure();
+      let quiz = state.arena.quizzes.find(q => q && q.id === state.arena.activeQuizId);
+      if (!quiz) {
+        quiz = state.arena.quizzes[0];
+        state.arena.activeQuizId = quiz.id;
+      }
+      return quiz;
+    }
+
+    function pushState() {
+      localStorage.setItem("ybw_event_state", JSON.stringify(state));
+      pushStateToFirebase();
+      
+      if (localChannel) {
+        localChannel.postMessage({ type: "STATE_UPDATE", payload: state });
+      }
+      
+      updateUI();
+    }
+
+    function pushStateToFirebase() {
+      if (db && isFirebaseConnected) {
+        const cleanState = JSON.parse(JSON.stringify(state));
+        if (cleanState.arena && cleanState.arena.quizzes) {
+          cleanState.arena.quizzes.forEach(q => { if(q) q.slides = []; });
+        }
+        db.ref("ybw_event_state").set(cleanState);
+      }
+    }
+
+    function manualSaveData() {
+      pushState();
+      alert("Data berhasil disimpan secara permanen!");
+    }
+
+    function resetTestingData() {
+      if (confirm("Reset Hasil Uji Coba?\n\nIni akan mengembalikan semua peserta yang 'Excluded' kembali ke Active Pool dan mengosongkan Rekap Partisipasi.")) {
+        state.partisipasi = [];
+        if (state.peserta) state.peserta.forEach(p => { if(p) p.excluded = false; });
+        if (db && isFirebaseConnected) db.ref("ybw_answers").remove();
+        pushState();
+        alert("Sesi uji coba berhasil di-reset!");
+      }
+    }
+
+    function resetAllPeserta() {
+      if (confirm("PERINGATAN!\n\nApakah kamu yakin ingin MENGATAS / MENGOSONGKAN SELURUH data peserta?")) {
+        state.peserta = [];
+        state.partisipasi = [];
+        pushState();
+        alert("Seluruh data peserta telah dikosongkan!");
+      }
+    }
+
+    function updateUI() {
+      renderStats();
+      renderPesertaTable();
+      renderPartisipasiTable();
+      renderWheel();
+      renderArenaUI();
+    }
+
+    function renderStats() {
+      const total = document.getElementById("statTotalPeserta");
+      const part = document.getElementById("statPartisipan");
+      if (total) total.textContent = (state.peserta || []).length;
+      if (part) part.textContent = (state.partisipasi || []).length;
+    }
+
+    function setMode(mode) {
+      if (mode === 'admin' && currentMode !== 'admin') {
+        const inputPin = prompt("Masukkan PIN Admin MC:");
+        if (inputPin !== ADMIN_PIN) {
+          alert("PIN Salah! Akses Mode Admin ditolak.");
+          return;
+        }
+      }
+
+      currentMode = mode;
+      const btnAdmin = document.getElementById("btnModeAdmin");
+      const btnPeserta = document.getElementById("btnModePeserta");
+
+      if (mode === 'admin') {
+        if(btnAdmin) btnAdmin.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow cursor-pointer";
+        if(btnPeserta) btnPeserta.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white cursor-pointer";
+        document.querySelectorAll(".admin-only").forEach(el => el.style.display = "block");
+        document.querySelectorAll(".peserta-only").forEach(el => el.style.display = "none");
+        const closeBtn = document.getElementById("btnModalClosePeserta");
+        if(closeBtn) closeBtn.style.display = "none";
+      } else {
+        if(btnPeserta) btnPeserta.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow cursor-pointer";
+        if(btnAdmin) btnAdmin.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white cursor-pointer";
+        document.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
+        document.querySelectorAll(".peserta-only").forEach(el => el.style.display = "block");
+        const closeBtn = document.getElementById("btnModalClosePeserta");
+        if(closeBtn) closeBtn.style.display = "block";
+      }
+
+      renderArenaUI();
+    }
+
+    function switchTab(tabKey) {
+      document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 text-gray-400 hover:bg-uii-card hover:text-white cursor-pointer";
+      });
+
+      const targetTab = document.getElementById(`tab-${tabKey}`);
+      if (targetTab) targetTab.style.display = "block";
+      
+      const activeBtn = document.getElementById(`tabBtn-${tabKey}`);
+      if (activeBtn) activeBtn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-2 bg-uii-gold text-uii-navy cursor-pointer";
+
+      if (tabKey === 'spin') renderWheel();
+    }
+
+    function setSpinBatchFilter(batchVal) {
+      spinBatchFilter = batchVal;
+
+      const btn1 = document.getElementById("btnSpinBatch1");
+      const btn2 = document.getElementById("btnSpinBatch2");
+      const btnAll = document.getElementById("btnSpinBatchAll");
+
+      const activeClass = "px-3 py-2 text-xs font-bold rounded-xl border border-uii-gold bg-uii-gold text-uii-navy transition cursor-pointer";
+      const inactiveClass = "px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer";
+
+      if (btn1) btn1.className = batchVal === 'batch1' ? activeClass : inactiveClass;
+      if (btn2) btn2.className = batchVal === 'batch2' ? activeClass : inactiveClass;
+      if (btnAll) btnAll.className = batchVal === 'all' ? activeClass : inactiveClass;
+
+      renderWheel();
+    }
+
+    function getFilteredWheelPool() {
+      return (state.peserta || []).filter(p => {
+        if (!p || p.excluded) return false;
+        if (spinBatchFilter !== 'all' && p.batch !== spinBatchFilter) return false;
+        if (activeSpinFilter === 'L') return p.gender === 'L';
+        if (activeSpinFilter === 'P') return p.gender === 'P';
+        return true;
+      });
+    }
+
+    function setSpinFilter(filterVal) {
+      activeSpinFilter = filterVal;
+      renderWheel();
+    }
+
+    function adjustSpinCount(delta) {
+      const input = document.getElementById("inputSpinCount");
+      if (!input) return;
+      let val = parseInt(input.value) || 1;
+      val = Math.max(1, Math.min(10, val + delta));
+      input.value = val;
+    }
+
+    function renderWheel() {
+      const canvas = document.getElementById("wheelCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const pool = getFilteredWheelPool();
+
+      const activeBatchList = (state.peserta || []).filter(p => {
+        if (!p || p.excluded) return false;
+        if (spinBatchFilter !== 'all' && p.batch !== spinBatchFilter) return false;
+        return true;
+      });
+
+      const bgAll = document.getElementById("badgeCountAll");
+      const bgL = document.getElementById("badgeCountL");
+      const bgP = document.getElementById("badgeCountP");
+
+      if (bgAll) bgAll.textContent = activeBatchList.length;
+      if (bgL) bgL.textContent = activeBatchList.filter(p => p.gender === 'L').length;
+      if (bgP) bgP.textContent = activeBatchList.filter(p => p.gender === 'P').length;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = canvas.width / 2 - 10;
+
+      if (pool.length === 0) {
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "#07111E";
+        ctx.fill();
+        ctx.strokeStyle = "#F5B800";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        ctx.fillStyle = "#F5B800";
+        ctx.font = "bold 16px Inter";
+        ctx.textAlign = "center";
+        ctx.fillText("Tidak Ada Peserta Tersedia", centerX, centerY);
+        return;
+      }
+
+      const sliceAngle = (2 * Math.PI) / pool.length;
+      const colors = ["#050E1A", "#07111E", "#1a2738", "#111f33"];
+
+      for (let i = 0; i < pool.length; i++) {
+        const angle = wheelRotation + i * sliceAngle;
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        ctx.strokeStyle = "#F5B800";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        const textMidAngle = angle + sliceAngle / 2;
+        ctx.rotate(textMidAngle);
+
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 14px Inter";
+
+        let normalizedAngle = textMidAngle % (2 * Math.PI);
+        if (normalizedAngle < 0) normalizedAngle += 2 * Math.PI;
+
+        if (normalizedAngle > Math.PI / 2 && normalizedAngle < (3 * Math.PI) / 2) {
+          ctx.rotate(Math.PI);
+          ctx.textAlign = "left";
+          ctx.fillText(pool[i].nama, -radius + 20, 5);
+        } else {
+          ctx.fillText(pool[i].nama, radius - 20, 5);
+        }
+        ctx.restore();
+      }
+    }
+
+    function triggerSpinWheel() {
+      if (isSpinning) return;
+      const pool = getFilteredWheelPool();
+      if (pool.length === 0) {
+        alert("Pool peserta untuk filter ini kosong!");
+        return;
+      }
+
+      const countNeeded = parseInt(document.getElementById("inputSpinCount").value) || 1;
+      const targetRotation = wheelRotation + (Math.PI * 2 * 5) + (Math.random() * Math.PI * 2);
+      
+      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+      const winners = shuffled.slice(0, Math.min(countNeeded, pool.length));
+      const nowTimestamp = Date.now();
+      lastProcessedSpinTimestamp = nowTimestamp;
+
+      if (db && isFirebaseConnected) {
+        db.ref("ybw_spin_event").set({
+          targetRotation: targetRotation,
+          winners: winners,
+          timestamp: nowTimestamp
+        });
+      }
+      
+      animateWheelTo(targetRotation, winners);
+    }
+
+    function animateWheelTo(targetRot, winners) {
+      if (isSpinning) return;
+      isSpinning = true;
+
+      const startRotation = wheelRotation;
+      const duration = 4000;
+      const startTime = performance.now();
+
+      function animateWheel(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        
+        wheelRotation = startRotation + (targetRot - startRotation) * easeOut;
+        renderWheel();
+
+        if (progress < 1) {
+          requestAnimationFrame(animateWheel);
+        } else {
+          isSpinning = false;
+          if (winners && winners.length > 0) {
+            pickWheelWinners(winners);
+          }
+        }
+      }
+
+      requestAnimationFrame(animateWheel);
+    }
+
+    function pickWheelWinners(selected) {
+      state.lastWinners = selected;
+
+      const listContainer = document.getElementById("listSelectedNames");
+      if (listContainer) {
+        listContainer.innerHTML = selected.map((p, idx) => `
+          <div class="flex items-center justify-between p-2.5 bg-uii-card rounded-lg border border-uii-border">
+            <span class="font-bold text-sm text-white">${idx + 1}. ${p.nama}</span>
+            <span class="text-xs bg-uii-goldLight text-uii-gold font-bold px-2 py-0.5 rounded border border-uii-gold/30">${p.gender === 'L' ? 'Laki-Laki' : 'Perempuan'}</span>
+          </div>
+        `).join('');
+      }
+
+      const modal = document.getElementById("modalSpinResult");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeSpinResultModal() {
+      const modal = document.getElementById("modalSpinResult");
+      if (modal) modal.style.display = "none";
+    }
+
+    function handleSpinMitigation(action) {
+      const inputSesi = document.getElementById("inputSesiGame");
+      const sesiName = inputSesi ? inputSesi.value : "Sesi Game";
+      const winners = state.lastWinners || [];
+
+      if (action === 'catat') {
+        winners.forEach(w => {
+          if (!state.partisipasi) state.partisipasi = [];
+          state.partisipasi.push({
+            id: "part-" + Date.now() + Math.random().toString(36).substr(2, 4),
+            nama: w.nama,
+            batch: w.batch,
+            date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+            sesi: sesiName,
+            statusPartisipasi: "Berpartisipasi",
+            statusHadiah: "Belum Dapat",
+          });
+          const pIdx = state.peserta.findIndex(p => p && p.id === w.id);
+          if (pIdx !== -1) state.peserta[pIdx].excluded = true;
+        });
+      } else if (action === 'gugur') {
+        winners.forEach(w => {
+          const pIdx = state.peserta.findIndex(p => p && p.id === w.id);
+          if (pIdx !== -1) state.peserta[pIdx].excluded = true;
+        });
+      }
+
+      closeSpinResultModal();
+      pushState();
+    }
+
+    function filterBatchData(batch) {
+      activeBatch = batch;
+      const tab1 = document.getElementById("batchTab-1");
+      const tab2 = document.getElementById("batchTab-2");
+
+      if (tab1) tab1.className = batch === 'batch1' 
+        ? "pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer"
+        : "pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 cursor-pointer";
+      
+      if (tab2) tab2.className = batch === 'batch2' 
+        ? "pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer"
+        : "pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 cursor-pointer";
+
+      renderPesertaTable();
+      renderWheel();
+    }
+
+    function renderPesertaTable() {
+      const tbody = document.getElementById("tableBodyPeserta");
+      if (!tbody) return;
+
+      const searchNama = (document.getElementById("filterPesertaNama")?.value || "").toLowerCase().trim();
+      const filterGender = document.getElementById("filterPesertaGender")?.value || "all";
+      const filterStatus = document.getElementById("filterPesertaStatus")?.value || "all";
+
+      let list = (state.peserta || []).filter(p => p && p.batch === activeBatch);
+
+      if (searchNama) list = list.filter(p => p.nama.toLowerCase().includes(searchNama));
+      if (filterGender !== "all") list = list.filter(p => p.gender === filterGender);
+      if (filterStatus !== "all") {
+        if (filterStatus === "active") list = list.filter(p => !p.excluded);
+        if (filterStatus === "excluded") list = list.filter(p => p.excluded);
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-500 italic">Tidak ada data peserta yang cocok dengan filter.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map((p, idx) => `
+        <tr class="hover:bg-uii-navy/50 transition">
+          <td class="px-4 py-3 text-xs text-gray-400">${idx + 1}</td>
+          <td class="px-4 py-3 font-semibold text-white">${p.nama}</td>
+          <td class="px-4 py-3 text-xs">${p.gender === 'L' ? 'Laki-Laki' : 'Perempuan'}</td>
+          <td class="px-4 py-3 text-xs uppercase text-gray-400">${p.batch}</td>
+          <td class="px-4 py-3 text-center">
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full ${p.excluded ? 'bg-rose-900/50 text-rose-300 border border-rose-800' : 'bg-emerald-900/50 text-emerald-300 border border-emerald-800'}">
+              ${p.excluded ? 'Excluded' : 'Active Pool'}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-right space-x-1 admin-only" style="${currentMode === 'admin' ? '' : 'display: none;'}">
+            <button onclick="editPeserta('${p.id}')" class="p-1.5 text-gray-400 hover:text-uii-gold cursor-pointer"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deletePeserta('${p.id}')" class="p-1.5 text-gray-400 hover:text-rose-400 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function handleImportPeserta(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        try {
+          if (file.name.endsWith(".json")) {
+            const data = JSON.parse(content);
+            if (Array.isArray(data)) {
+              state.peserta = data.filter(p => p !== null);
+              pushState();
+            }
+          } else {
+            const lines = content.split("\n");
+            const newPeserta = [];
+            
+            lines.forEach((line, i) => {
+              if (i === 0 || !line.trim()) return;
+              const cleanLine = line.replace(/"/g, '').trim();
+              if (!cleanLine) return;
+
+              const delimiter = cleanLine.includes(';') ? ';' : ',';
+              const parts = cleanLine.split(delimiter).map(s => s.trim());
+              
+              const nama = parts[0];
+              let genderRaw = (parts[1] || 'L').toUpperCase();
+              let batchRaw = (parts[2] || activeBatch).toLowerCase();
+              const gender = genderRaw.startsWith('P') ? 'P' : 'L';
+
+              let batch = 'batch1';
+              if (batchRaw.includes('2')) batch = 'batch2';
+
+              if (nama) {
+                newPeserta.push({
+                  id: "p-" + Date.now() + i + Math.random().toString(36).substr(2, 3),
+                  nama: nama,
+                  gender: gender,
+                  batch: batch,
+                  excluded: false
+                });
+              }
+            });
+
+            if (newPeserta.length > 0) {
+              state.peserta = newPeserta;
+              pushState();
+              alert(`Berhasil mengimpor ${newPeserta.length} data peserta!`);
+            } else {
+              alert("Tidak ada data peserta yang berhasil dibaca.");
+            }
+          }
+        } catch (err) {
+          alert("Gagal membaca file import: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function openModalTambahPeserta() {
+      document.getElementById("modalPesertaTitle").textContent = "Tambah Peserta Baru";
+      document.getElementById("editPesertaId").value = "";
+      document.getElementById("formPesertaNama").value = "";
+      document.getElementById("formPesertaGender").value = "L";
+      document.getElementById("formPesertaBatch").value = activeBatch;
+      document.getElementById("modalPesertaForm").style.display = "flex";
+    }
+
+    function closeModalPeserta() {
+      document.getElementById("modalPesertaForm").style.display = "none";
+    }
+
+    function savePesertaData() {
+      const id = document.getElementById("editPesertaId").value;
+      const nama = document.getElementById("formPesertaNama").value.trim();
+      const gender = document.getElementById("formPesertaGender").value;
+      const batch = document.getElementById("formPesertaBatch").value;
+
+      if (!nama) return alert("Isi nama peserta!");
+      if (!state.peserta) state.peserta = [];
+
+      if (id) {
+        const idx = state.peserta.findIndex(p => p && p.id === id);
+        if (idx !== -1) {
+          state.peserta[idx].nama = nama;
+          state.peserta[idx].gender = gender;
+          state.peserta[idx].batch = batch;
+        }
+      } else {
+        state.peserta.push({
+          id: "p-" + Date.now(),
+          nama, gender, batch, excluded: false
+        });
+      }
+
+      closeModalPeserta();
+      pushState();
+    }
+
+    function editPeserta(id) {
+      const p = state.peserta.find(item => item && item.id === id);
+      if (!p) return;
+      document.getElementById("modalPesertaTitle").textContent = "Edit Data Peserta";
+      document.getElementById("editPesertaId").value = p.id;
+      document.getElementById("formPesertaNama").value = p.nama;
+      document.getElementById("formPesertaGender").value = p.gender;
+      document.getElementById("formPesertaBatch").value = p.batch;
+      document.getElementById("modalPesertaForm").style.display = "flex";
+    }
+
+    function deletePeserta(id) {
+      if (confirm("Hapus peserta ini?")) {
+        state.peserta = state.peserta.filter(p => p && p.id !== id);
+        pushState();
+      }
+    }
+
+    function renderPartisipasiTable() {
+      const tbody = document.getElementById("tableBodyPartisipasi");
+      if (!tbody) return;
+
+      const list = (state.partisipasi || []).filter(p => p !== null);
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 italic">Belum ada data rekap partisipasi.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map((item, idx) => `
+        <tr class="hover:bg-uii-navy/50 transition">
+          <td class="px-4 py-3 text-xs text-gray-400">${idx + 1}</td>
+          <td class="px-4 py-3 font-semibold text-white">${item.nama}</td>
+          <td class="px-4 py-3 text-xs uppercase text-gray-400">${item.batch}</td>
+          <td class="px-4 py-3 text-xs text-gray-300">${item.date}</td>
+          <td class="px-4 py-3 text-xs text-uii-gold">${item.sesi}</td>
+          <td class="px-4 py-3 text-xs"><span class="px-2 py-0.5 rounded border bg-uii-navy text-white border-uii-border">${item.statusPartisipasi}</span></td>
+          <td class="px-4 py-3 text-xs">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${item.statusHadiah === 'Menang Game' ? 'bg-amber-900/50 text-amber-300 border border-amber-700' : item.statusHadiah === 'Hadiah Cuma-Cuma' ? 'bg-purple-900/50 text-purple-300 border border-purple-700' : 'bg-gray-800 text-gray-400'}">
+              ${item.statusHadiah}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-right space-x-1 admin-only" style="${currentMode === 'admin' ? '' : 'display: none;'}">
+            <button onclick="editPartisipasi('${item.id}')" class="p-1.5 text-gray-400 hover:text-uii-gold cursor-pointer"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deletePartisipasi('${item.id}')" class="p-1.5 text-gray-400 hover:text-rose-400 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function editPartisipasi(id) {
+      const item = state.partisipasi.find(p => p && p.id === id);
+      if (!item) return;
+
+      const newHadiah = prompt("Pilih Status Hadiah:\n1. Menang Game\n2. Hadiah Cuma-Cuma\n3. Belum Dapat", item.statusHadiah);
+      if (newHadiah) {
+        item.statusHadiah = newHadiah;
+        pushState();
+      }
+    }
+
+    function deletePartisipasi(id) {
+      if (confirm("Hapus catatan partisipasi ini?")) {
+        state.partisipasi = state.partisipasi.filter(p => p && p.id !== id);
+        pushState();
+      }
+    }
+
+    function exportDataPartisipasi() {
+      let csvContent = "data:text/csv;charset=utf-8,No,Nama Peserta,Batch,Hari & Tanggal,Sesi Game,Status Partisipasi,Status Hadiah\n";
+      (state.partisipasi || []).filter(p => p !== null).forEach((item, idx) => {
+        csvContent += `${idx + 1},"${item.nama}","${item.batch}","${item.date}","${item.sesi}","${item.statusPartisipasi}","${item.statusHadiah}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Rekap_Partisipasi_YBW_UII.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function addNewQuizSet() {
+      const title = prompt("Masukkan Judul Quiz Baru:", `Quiz ${state.arena.quizzes.length + 1} - Tebak Gambar`);
+      if (!title) return;
+
+      const newId = "q-" + Date.now();
+      const newQuiz = {
+        id: newId,
+        title: title.trim(),
+        slides: [],
+        currentSlideIdx: 0,
+        rules: "Tebak gambar di atas dengan cepat!",
+        timerSec: 30,
+        answers: []
+      };
+
+      state.arena.quizzes.push(newQuiz);
+      state.arena.activeQuizId = newId;
+      pushState();
+    }
+
+    function switchQuizSet(quizId) {
+      state.arena.activeQuizId = quizId;
+      pushState();
+    }
+
+    function deleteCurrentQuizSet() {
+      if (state.arena.quizzes.length <= 1) {
+        alert("Tidak bisa menghapus! Minimal harus ada 1 Quiz.");
+        return;
+      }
+
+      const activeQuiz = getActiveQuiz();
+      if (confirm(`Hapus quiz "${activeQuiz.title}" beserta seluruh slide dan jawabannya?`)) {
+        state.arena.quizzes = state.arena.quizzes.filter(q => q && q.id !== activeQuiz.id);
+        state.arena.activeQuizId = state.arena.quizzes[0].id;
+        pushState();
+      }
+    }
+
+    function toggleArenaSession(isOn) {
+      state.arena.status = isOn;
+      pushState();
+    }
+
+    function updateArenaRules(val) {
+      const quiz = getActiveQuiz();
+      quiz.rules = val;
+      pushState();
+    }
+
+    function handleUploadSlideArena(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      const quiz = getActiveQuiz();
+      if (!quiz.slides) quiz.slides = [];
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          quiz.slides.push(evt.target.result);
+          pushState();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function clearArenaSlides() {
+      const quiz = getActiveQuiz();
+      quiz.slides = [];
+      quiz.currentSlideIdx = 0;
+      pushState();
+    }
+
+    function prevArenaSlide() {
+      const quiz = getActiveQuiz();
+      if (quiz.currentSlideIdx > 0) {
+        quiz.currentSlideIdx--;
+        pushState();
+      }
+    }
+
+    function nextArenaSlide() {
+      const quiz = getActiveQuiz();
+      if (quiz.slides && quiz.currentSlideIdx < quiz.slides.length - 1) {
+        quiz.currentSlideIdx++;
+        pushState();
+      }
+    }
+
+    let arenaTimerInterval = null;
+    function startArenaTimer() {
+      const secInput = document.getElementById("inputArenaTimerSec");
+      const sec = parseInt(secInput ? secInput.value : 30) || 30;
+      const quiz = getActiveQuiz();
+      quiz.timerSec = sec;
+      pushState();
+
+      if (arenaTimerInterval) clearInterval(arenaTimerInterval);
+      arenaTimerInterval = setInterval(() => {
+        if (quiz.timerSec > 0) {
+          quiz.timerSec--;
+          const disp1 = document.getElementById("arenaTimerDisplay");
+          const disp2 = document.getElementById("interaktifTimerDisplay");
+          if(disp1) disp1.textContent = formatTimer(quiz.timerSec);
+          if(disp2) disp2.textContent = formatTimer(quiz.timerSec);
+        } else {
+          clearInterval(arenaTimerInterval);
+          playTimeUpSound();
+        }
+      }, 1000);
+    }
+
+    function renderArenaUI() {
+      const toggle = document.getElementById("toggleArenaStatus");
+      const label = document.getElementById("labelArenaStatus");
+      const activeDisplay = document.getElementById("arenaActiveDisplay");
+      const offDisplay = document.getElementById("arenaOffDisplay");
+
+      if (!toggle || !activeDisplay || !offDisplay) return;
+
+      toggle.checked = state.arena.status;
+      if (label) label.textContent = state.arena.status ? "STATUS: ON" : "STATUS: OFF";
+
+      const quizSelect = document.getElementById("selectQuizSet");
+      if (quizSelect) {
+        quizSelect.innerHTML = state.arena.quizzes.map(q => `
+          <option value="${q.id}" ${q.id === state.arena.activeQuizId ? 'selected' : ''}>${q.title}</option>
+        `).join('');
+      }
+
+      const activeQuiz = getActiveQuiz();
+
+      if (currentMode === 'peserta' && !state.arena.status) {
+        activeDisplay.style.display = "none";
+        offDisplay.style.display = "block";
+      } else {
+        activeDisplay.style.display = "grid";
+        offDisplay.style.display = "none";
+      }
+
+      const badge = document.getElementById("activeQuizTitleBadge");
+      const rules = document.getElementById("arenaRulesText");
+      const inpRules = document.getElementById("inputArenaRules");
+
+      if (badge) badge.textContent = activeQuiz.title;
+      if (rules) rules.textContent = activeQuiz.rules || "Belum ada instruksi khusus.";
+      if (inpRules) inpRules.value = activeQuiz.rules || "";
+
+      const slides = activeQuiz.slides || [];
+      const idx = activeQuiz.currentSlideIdx || 0;
+      const imgEl = document.getElementById("arenaImageDisplay");
+      const placeholder = document.getElementById("arenaImagePlaceholder");
+      const slideNum = document.getElementById("arenaSlideNum");
+
+      if (slides.length > 0 && slides[idx]) {
+        if (imgEl) { imgEl.src = slides[idx]; imgEl.style.display = "block"; }
+        if (placeholder) placeholder.style.display = "none";
+        if (slideNum) slideNum.textContent = `${idx + 1} / ${slides.length}`;
+      } else {
+        if (imgEl) imgEl.style.display = "none";
+        if (placeholder) placeholder.style.display = "block";
+        if (slideNum) slideNum.textContent = `0 / 0`;
+      }
+
+      renderArenaAnswersList();
+    }
+
+    function renderArenaAnswersList() {
+      const listContainer = document.getElementById("arenaAnswersList");
+      if (!listContainer) return;
+      const quiz = getActiveQuiz();
+      const answers = quiz.answers || [];
+
+      if (answers.length === 0) {
+        listContainer.innerHTML = `<div class="text-center py-12 text-gray-500 text-xs italic">Belum ada jawaban masuk dari peserta...</div>`;
+        return;
+      }
+
+      listContainer.innerHTML = answers.map((ans) => `
+        <div class="p-3 bg-uii-navy border border-uii-border rounded-xl space-y-1 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-uii-gold">${ans.nama}</span>
+            <span class="text-[10px] text-gray-500 font-mono">${ans.time}</span>
+          </div>
+          <p class="text-xs text-white">${ans.jawaban}</p>
+        </div>
+      `).join('');
+    }
+
+    function clearArenaAnswers() {
+      const quiz = getActiveQuiz();
+      quiz.answers = [];
+      if (db && isFirebaseConnected) {
+        db.ref("ybw_answers").remove();
+      }
+      pushState();
+    }
+
+    function submitInteractiveAnswer(e) {
+      e.preventDefault();
+      const namaInp = document.getElementById("interaktifNama");
+      const jawInp = document.getElementById("interaktifJawaban");
+      const nama = namaInp ? namaInp.value.trim() : "";
+      const jawaban = jawInp ? jawInp.value.trim() : "";
+
+      if (!nama || !jawaban) return;
+
+      const newAns = {
+        id: "ans-" + Date.now() + Math.random().toString(36).substr(2, 3),
+        nama,
+        jawaban,
+        time: new Date().toLocaleTimeString('id-ID', { hour12: false })
+      };
+
+      if (db && isFirebaseConnected) {
+        db.ref("ybw_answers").push(newAns);
+      } else {
+        const quiz = getActiveQuiz();
+        if (!quiz.answers) quiz.answers = [];
+        quiz.answers.unshift(newAns);
+        pushState();
+      }
+
+      if (jawInp) jawInp.value = "";
+      alert("Jawaban berhasil dikirim ke panggung!");
+    }
+
+    function sendEmojiReaction(emoji) {
+      if (db && isFirebaseConnected) {
+        db.ref("ybw_emojis").push(emoji);
+      } else {
+        if (localChannel) localChannel.postMessage({ type: "EMOJI", emoji });
+        spawnFloatingEmoji(emoji);
+      }
+    }
+
+    function spawnFloatingEmoji(emoji) {
+      const container = document.getElementById("arenaEmojiOverlay");
+      if (!container) return;
+
+      const el = document.createElement("div");
+      el.textContent = emoji;
+      el.className = "absolute text-4xl transition-all duration-1000 ease-out pointer-events-none drop-shadow-md z-40";
+      el.style.left = Math.random() * 80 + 10 + "%";
+      el.style.bottom = "10px";
+      el.style.opacity = "1";
+
+      container.appendChild(el);
+
+      setTimeout(() => {
+        el.style.bottom = "80%";
+        el.style.opacity = "0";
+      }, 50);
+
+      setTimeout(() => el.remove(), 1050);
+    }
+
+    let synthTimerInterval = null;
+    function startSynthTimer() {
+      const inp = document.getElementById("inputSynthTimerSec");
+      let sec = parseInt(inp ? inp.value : 10) || 10;
+      const disp = document.getElementById("synthTimerDisplay");
+      if (disp) disp.textContent = formatTimer(sec);
+
+      if (synthTimerInterval) clearInterval(synthTimerInterval);
+      synthTimerInterval = setInterval(() => {
+        sec--;
+        if (disp) disp.textContent = formatTimer(sec);
+        if (sec <= 0) {
+          clearInterval(synthTimerInterval);
+          playTimeUpSound();
+        }
+      }, 1000);
+    }
+
+    function playTimeUpSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.8);
+
+        gain.gain.setValueAtTime(1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.8);
+
+        alert("DOR! WAKTU HABIS ⏰");
+      } catch (e) {
+        alert("DOR! WAKTU HABIS ⏰");
+      }
+    }
+
+    function formatTimer(sec) {
+      const m = Math.floor(sec / 60).toString().padStart(2, '0');
+      const s = (sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function openQRModal() {
+      const modal = document.getElementById("modalQR");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeQRModal() {
+      const modal = document.getElementById("modalQR");
+      if (modal) modal.style.display = "none";
+    }
+
+    function generateQRCode(url) {
+      const container = document.getElementById("qrcodeContainer");
+      if (!container) return;
+      container.innerHTML = "";
+      if (!url) return;
+      try {
+        new QRCode(container, {
+          text: url,
+          width: 180,
+          height: 180,
+          colorDark: "#050E1A",
+          colorLight: "#ffffff"
+        });
+      } catch(e){}
+    }
+  </script>
+</body>
+</html>
