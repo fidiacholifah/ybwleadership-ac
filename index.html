@@ -682,7 +682,7 @@
     const localChannel = new BroadcastChannel("ybw_event_channel");
 
     // 2. GLOBAL STATE
-    let currentMode = 'admin'; // 'admin' | 'peserta'
+    let currentMode = 'peserta'; // Semua orang yang baru scan QR otomatis masuk Mode Peserta
     let activeBatch = 'batch1'; // 'batch1' | 'batch2'
     let activeSpinFilter = 'all'; // 'all' | 'L' | 'P'
     let isSpinning = false;
@@ -799,24 +799,34 @@
     }
 
     // 4. MODE & TAB NAVIGATION
-    function setMode(mode) {
-      currentMode = mode;
-      const btnAdmin = document.getElementById("btnModeAdmin");
-      const btnPeserta = document.getElementById("btnModePeserta");
+    const ADMIN_PIN = "1008DIA"; // Ubah PIN ini sesuai keinginanmu
 
-      if (mode === 'admin') {
-        btnAdmin.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow";
-        btnPeserta.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white";
-        document.querySelectorAll(".admin-only").forEach(el => el.classList.remove("hidden"));
-        document.querySelectorAll(".peserta-only").forEach(el => el.classList.add("hidden"));
-      } else {
-        btnPeserta.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow";
-        btnAdmin.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white";
-        document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
-        document.querySelectorAll(".peserta-only").forEach(el => el.classList.remove("hidden"));
-      }
+function setMode(mode) {
+  // Jika mencoba masuk ke Mode Admin, minta PIN rahasia
+  if (mode === 'admin' && currentMode !== 'admin') {
+    const inputPin = prompt("Masukkan PIN Admin MC:");
+    if (inputPin !== ADMIN_PIN) {
+      alert("PIN Salah! Akses Mode Admin ditolak.");
+      return;
     }
+  }
 
+  currentMode = mode;
+  const btnAdmin = document.getElementById("btnModeAdmin");
+  const btnPeserta = document.getElementById("btnModePeserta");
+
+  if (mode === 'admin') {
+    btnAdmin.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow";
+    btnPeserta.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white";
+    document.querySelectorAll(".admin-only").forEach(el => el.classList.remove("hidden"));
+    document.querySelectorAll(".peserta-only").forEach(el => el.classList.add("hidden"));
+  } else {
+    btnPeserta.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 bg-uii-gold text-uii-navy shadow";
+    btnAdmin.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 text-gray-400 hover:text-white";
+    document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
+    document.querySelectorAll(".peserta-only").forEach(el => el.classList.remove("hidden"));
+  }
+}
     function switchTab(tabKey) {
       document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
       document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -928,7 +938,12 @@
       }
     }
 
-    function triggerSpinWheel() {
+      function triggerSpinWheel() {
+      if (currentMode !== 'admin') {
+      alert("Hanya Admin/MC yang dapat memutar undian!");
+      return;
+      if (isSpinning) return;
+      const pool = getFilteredWheelPool();
       if (isSpinning) return;
       const pool = getFilteredWheelPool();
       if (pool.length === 0) {
