@@ -160,10 +160,30 @@
         </div>
 
         <div class="lg:col-span-5 space-y-6">
-          <div class="bg-uii-card p-5 rounded-2xl border border-uii-border space-y-3">
+          <div class="bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4">
             <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
               <i class="fa-solid fa-filter text-uii-gold"></i> Filter Undian
             </h3>
+
+            <!-- FITUR 1: FILTER BATCH DI TAB SPIN WHEEL -->
+            <div class="pb-3 border-b border-uii-border">
+              <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">
+                <i class="fa-solid fa-layer-group text-uii-gold mr-1"></i> Pilih Batch Peserta:
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" onclick="setSpinBatchFilter('batch1')" id="btnSpinBatch1" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-gold bg-uii-gold text-uii-navy transition cursor-pointer">
+                  Batch 1
+                </button>
+                <button type="button" onclick="setSpinBatchFilter('batch2')" id="btnSpinBatch2" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">
+                  Batch 2
+                </button>
+                <button type="button" onclick="setSpinBatchFilter('all')" id="btnSpinBatchAll" class="px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer">
+                  Semua Batch
+                </button>
+              </div>
+            </div>
+
+            <!-- FILTER GENDER -->
             <div class="grid grid-cols-1 gap-2.5">
               <label onclick="setSpinFilter('all')" class="spin-filter-card flex items-center justify-between p-3.5 rounded-xl border border-uii-gold bg-uii-goldLight cursor-pointer transition">
                 <div class="flex items-center gap-3">
@@ -243,7 +263,6 @@
     <section id="tab-data" class="tab-content space-y-6" style="display: none;">
       <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-6">
         
-        <!-- Header & Action Buttons -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -272,7 +291,6 @@
           </div>
         </div>
 
-        <!-- Filter Batch Tabs -->
         <div class="flex border-b border-uii-border gap-4">
           <button onclick="filterBatchData('batch1')" id="batchTab-1" class="pb-3 text-sm font-bold border-b-2 border-uii-gold text-uii-gold flex items-center gap-2 cursor-pointer">
             <i class="fa-solid fa-calendar-day"></i> Batch 1 (27 - 28 Oktober 2026)
@@ -282,7 +300,6 @@
           </button>
         </div>
 
-        <!-- Filter Controls Bar (Search & Dropdowns) -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-uii-navy p-3.5 rounded-xl border border-uii-border">
           <div>
             <label class="block text-[11px] font-medium text-gray-400 mb-1"><i class="fa-solid fa-magnifying-glass text-uii-gold mr-1"></i> Cari Nama Peserta</label>
@@ -366,11 +383,14 @@
 
     <!-- ================= TAB 4: ARENA ================= -->
     <section id="tab-arena" class="tab-content space-y-6" style="display: none;">
+      
+      <!-- FITUR 3: KONTROL ARENA & SIMPAN MULTI-QUIZ -->
       <div class="admin-only bg-uii-card p-5 rounded-2xl border border-uii-border space-y-4" style="display: none;">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-uii-border">
+          
           <div class="flex items-center gap-3">
             <h3 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Sesi Arena (Admin)
+              <i class="fa-solid fa-sliders text-uii-gold"></i> Kontrol Sesi Arena
             </h3>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" id="toggleArenaStatus" class="sr-only peer" onchange="toggleArenaSession(this.checked)">
@@ -379,20 +399,25 @@
             </label>
           </div>
 
-          <div class="flex items-center gap-2">
-            <label class="px-3 py-1.5 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border text-xs rounded-lg cursor-pointer transition flex items-center gap-1.5">
-              <i class="fa-solid fa-cloud-arrow-up text-uii-gold"></i> Upload Slide/Gambar Game
-              <input type="file" id="inputSlideArena" accept="image/*" multiple class="hidden" onchange="handleUploadSlideArena(event)">
-            </label>
-            <button onclick="clearArenaSlides()" class="px-3 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer">
-              <i class="fa-solid fa-trash-can"></i> Reset Slide
+          <!-- FITUR MULTI QUIZ SELECTOR -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-bold text-gray-400">Pilih Quiz:</span>
+            <select id="selectQuizSet" onchange="switchQuizSet(this.value)" class="bg-uii-navy border border-uii-border text-xs text-white rounded-lg px-3 py-1.5 focus:outline-none focus:border-uii-gold font-bold">
+              <!-- Dynamically populated -->
+            </select>
+            <button onclick="addNewQuizSet()" class="px-3 py-1.5 bg-uii-gold hover:bg-uii-goldHover text-uii-navy font-bold text-xs rounded-lg transition cursor-pointer">
+              <i class="fa-solid fa-plus"></i> Quiz Baru
+            </button>
+            <button onclick="deleteCurrentQuizSet()" class="px-2.5 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer" title="Hapus Quiz Ini">
+              <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
+
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 pt-2 border-t border-uii-border">
-          <div class="md:col-span-8">
-            <label class="block text-xs font-medium text-gray-400 mb-1">Aturan Game / Instructions (Rules):</label>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div class="md:col-span-8 space-y-2">
+            <label class="block text-xs font-medium text-gray-400">Aturan Game / Instructions (Rules):</label>
             <input type="text" id="inputArenaRules" placeholder="Contoh: Tebak judul gambar di bawah ini dengan cepat via tab Interaktif!" class="w-full bg-uii-navy border border-uii-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-uii-gold" onchange="updateArenaRules(this.value)">
           </div>
           <div class="md:col-span-4 flex items-end gap-2">
@@ -405,14 +430,26 @@
             </button>
           </div>
         </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-uii-border">
+          <label class="px-3.5 py-1.5 bg-uii-navy hover:bg-uii-border text-gray-200 border border-uii-border text-xs rounded-lg cursor-pointer transition flex items-center gap-1.5">
+            <i class="fa-solid fa-cloud-arrow-up text-uii-gold"></i> Upload Slide Gambar Ke Quiz Ini
+            <input type="file" id="inputSlideArena" accept="image/*" multiple class="hidden" onchange="handleUploadSlideArena(event)">
+          </label>
+          <button onclick="clearArenaSlides()" class="px-3 py-1.5 bg-rose-900/40 hover:bg-rose-800/60 text-rose-300 border border-rose-800/50 text-xs rounded-lg transition cursor-pointer">
+            <i class="fa-solid fa-trash-can"></i> Reset Slide Gambar
+          </button>
+        </div>
       </div>
 
+      <!-- FITUR 2: ARENA DISPLAY & LIVE RESPONSES REALTIME -->
       <div id="arenaActiveDisplay" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div class="lg:col-span-8 bg-uii-card p-6 rounded-2xl border border-uii-border flex flex-col space-y-4">
           <div class="flex items-center justify-between border-b border-uii-border pb-3">
             <div class="flex items-center gap-2">
               <span class="text-xs font-bold text-uii-gold uppercase tracking-wider">Slide Game:</span>
               <span id="arenaSlideNum" class="text-xs bg-uii-navy px-2.5 py-1 rounded-full text-white font-mono border border-uii-border">0 / 0</span>
+              <span id="activeQuizTitleBadge" class="text-xs bg-uii-goldLight text-uii-gold font-bold px-2.5 py-0.5 rounded-full border border-uii-gold/30">Quiz 1</span>
             </div>
             <div class="flex items-center gap-2">
               <i class="fa-solid fa-hourglass-half text-uii-gold animate-pulse"></i>
@@ -424,7 +461,7 @@
             <img id="arenaImageDisplay" src="" alt="Arena Game Slide" class="max-w-full max-h-full object-contain hidden">
             <div id="arenaImagePlaceholder" class="text-center p-8 text-gray-500">
               <i class="fa-solid fa-images text-5xl mb-3 text-uii-border"></i>
-              <p class="text-sm">Belum ada slide gambar game yang diunggah.</p>
+              <p class="text-sm">Belum ada slide gambar game yang diunggah untuk quiz ini.</p>
             </div>
 
             <div class="admin-only absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-between opacity-0 group-hover:opacity-100 transition" style="display: none;">
@@ -446,6 +483,7 @@
           </div>
         </div>
 
+        <!-- FITUR 2: LIVE RESPONSES UNTUK ADMIN/MC -->
         <div class="lg:col-span-4 bg-uii-card p-6 rounded-2xl border border-uii-border flex flex-col h-[500px]">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center justify-between">
             <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-uii-gold"></i> Live Responses</span>
@@ -503,6 +541,7 @@
             </button>
           </form>
 
+          <!-- FITUR 2: EMOJI REACTION PARTICIPANT LAUNCHER -->
           <div class="pt-4 border-t border-uii-border space-y-3">
             <label class="block text-xs font-medium text-gray-400">Kirim Emoji Reaksi ke Layar Utama:</label>
             <div class="flex items-center gap-3 overflow-x-auto pb-2">
@@ -536,6 +575,7 @@
             </div>
           </div>
 
+          <!-- FITUR 2: REACTION STREAM LIVE -->
           <div class="bg-uii-card p-6 rounded-2xl border border-uii-border space-y-3 relative min-h-[220px] overflow-hidden">
             <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <i class="fa-solid fa-icons text-uii-gold"></i> Reaction Stream Live
@@ -680,20 +720,29 @@
     const ADMIN_PIN = "1008DIA";
     let currentMode = 'peserta';
     let activeBatch = 'batch1';
-    let activeSpinFilter = 'all';
+    let spinBatchFilter = 'batch1'; // FITUR 1: 'batch1', 'batch2', atau 'all'
+    let activeSpinFilter = 'all';  // Gender filter 'all', 'L', 'P'
     let isSpinning = false;
     let wheelRotation = 0;
 
+    // STRUCTURE DATA TERMASUK MULTI QUIZ (FITUR 3)
     let state = {
       peserta: [],
       partisipasi: [],
       arena: {
         status: false,
-        slides: [],
-        currentSlideIdx: 0,
-        rules: "Tebak gambar di atas dengan cepat!",
-        timerSec: 0,
-        answers: []
+        activeQuizId: "q1",
+        quizzes: [
+          {
+            id: "q1",
+            title: "Quiz 1 - Tebak Gambar",
+            slides: [],
+            currentSlideIdx: 0,
+            rules: "Tebak gambar di atas dengan cepat!",
+            timerSec: 0,
+            answers: []
+          }
+        ]
       },
       lastWinners: []
     };
@@ -727,23 +776,23 @@
     }
 
     function initDataSync() {
-      // 1. Ambil dari LocalStorage dulu sebagai perlindungan utama
       const localData = localStorage.getItem("ybw_event_state");
       if (localData) {
         try {
           state = JSON.parse(localData);
+          ensureStateStructure();
         } catch(e){}
       }
 
-      // 2. Sinkronkan ke Firebase jika ada koneksi
       if (db) {
         db.ref("ybw_event_state").on("value", (snapshot) => {
           const val = snapshot.val();
-          if (val && val.peserta && val.peserta.length > 0) {
+          if (val) {
             state = val;
+            ensureStateStructure();
             localStorage.setItem("ybw_event_state", JSON.stringify(state));
             updateUI();
-          } else if (state.peserta && state.peserta.length > 0) {
+          } else {
             pushStateToFirebase();
           }
         });
@@ -757,8 +806,33 @@
       updateUI();
     }
 
+    function ensureStateStructure() {
+      if (!state.partisipasi) state.partisipasi = [];
+      if (!state.peserta) state.peserta = [];
+      if (!state.arena) {
+        state.arena = {
+          status: false,
+          activeQuizId: "q1",
+          quizzes: [{ id: "q1", title: "Quiz 1 - Tebak Gambar", slides: [], currentSlideIdx: 0, rules: "", timerSec: 0, answers: [] }]
+        };
+      }
+      if (!state.arena.quizzes || state.arena.quizzes.length === 0) {
+        state.arena.quizzes = [{ id: "q1", title: "Quiz 1 - Tebak Gambar", slides: [], currentSlideIdx: 0, rules: "", timerSec: 0, answers: [] }];
+        state.arena.activeQuizId = "q1";
+      }
+    }
+
+    function getActiveQuiz() {
+      ensureStateStructure();
+      let quiz = state.arena.quizzes.find(q => q.id === state.arena.activeQuizId);
+      if (!quiz) {
+        quiz = state.arena.quizzes[0];
+        state.arena.activeQuizId = quiz.id;
+      }
+      return quiz;
+    }
+
     function pushState() {
-      // Selalu simpan ke LocalStorage agar tidak reset saat reload
       localStorage.setItem("ybw_event_state", JSON.stringify(state));
       
       if (db && isFirebaseConnected) {
@@ -778,7 +852,7 @@
 
     function manualSaveData() {
       pushState();
-      alert("Data berhasil disimpan secara permanen di memori browser dan Firebase!");
+      alert("Data berhasil disimpan secara permanen!");
     }
 
     function resetTestingData() {
@@ -788,12 +862,12 @@
           state.peserta.forEach(p => p.excluded = false);
         }
         pushState();
-        alert("Sesi uji coba berhasil di-reset! Semua peserta siap di-spin kembali.");
+        alert("Sesi uji coba berhasil di-reset!");
       }
     }
 
     function resetAllPeserta() {
-      if (confirm("PERINGATAN!\n\nApakah kamu yakin ingin MENGATAS / MENGOSONGKAN SELURUH data peserta? Data yang terhapus tidak bisa dikembalikan.")) {
+      if (confirm("PERINGATAN!\n\nApakah kamu yakin ingin MENGATAS / MENGOSONGKAN SELURUH data peserta?")) {
         state.peserta = [];
         state.partisipasi = [];
         pushState();
@@ -855,12 +929,35 @@
       if (tabKey === 'spin') renderWheel();
     }
 
+    // FITUR 1: SPIN WHEEL BATCH FILTER
+    function setSpinBatchFilter(batchVal) {
+      spinBatchFilter = batchVal;
+
+      const btn1 = document.getElementById("btnSpinBatch1");
+      const btn2 = document.getElementById("btnSpinBatch2");
+      const btnAll = document.getElementById("btnSpinBatchAll");
+
+      const activeClass = "px-3 py-2 text-xs font-bold rounded-xl border border-uii-gold bg-uii-gold text-uii-navy transition cursor-pointer";
+      const inactiveClass = "px-3 py-2 text-xs font-bold rounded-xl border border-uii-border bg-uii-navy text-gray-300 hover:text-white transition cursor-pointer";
+
+      if (btn1) btn1.className = batchVal === 'batch1' ? activeClass : inactiveClass;
+      if (btn2) btn2.className = batchVal === 'batch2' ? activeClass : inactiveClass;
+      if (btnAll) btnAll.className = batchVal === 'all' ? activeClass : inactiveClass;
+
+      renderWheel();
+    }
+
     function getFilteredWheelPool() {
       return (state.peserta || []).filter(p => {
         if (p.excluded) return false;
-        if (p.batch !== activeBatch) return false;
+        
+        // Filter batch spin
+        if (spinBatchFilter !== 'all' && p.batch !== spinBatchFilter) return false;
+
+        // Filter gender
         if (activeSpinFilter === 'L') return p.gender === 'L';
         if (activeSpinFilter === 'P') return p.gender === 'P';
+        
         return true;
       });
     }
@@ -883,10 +980,16 @@
       const ctx = canvas.getContext("2d");
       const pool = getFilteredWheelPool();
 
-      const allBatch = (state.peserta || []).filter(p => !p.excluded && p.batch === activeBatch);
-      document.getElementById("badgeCountAll").textContent = allBatch.length;
-      document.getElementById("badgeCountL").textContent = allBatch.filter(p => p.gender === 'L').length;
-      document.getElementById("badgeCountP").textContent = allBatch.filter(p => p.gender === 'P').length;
+      // Hitung statistik badge berdasarkan batch yang sedang di-filter di Spin Wheel
+      const activeBatchList = (state.peserta || []).filter(p => {
+        if (p.excluded) return false;
+        if (spinBatchFilter !== 'all' && p.batch !== spinBatchFilter) return false;
+        return true;
+      });
+
+      document.getElementById("badgeCountAll").textContent = activeBatchList.length;
+      document.getElementById("badgeCountL").textContent = activeBatchList.filter(p => p.gender === 'L').length;
+      document.getElementById("badgeCountP").textContent = activeBatchList.filter(p => p.gender === 'P').length;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const centerX = canvas.width / 2;
@@ -1291,13 +1394,54 @@
       link.remove();
     }
 
+    // FITUR 3: MANAJEMEN MULTI-QUIZ KONTROL ARENA
+    function addNewQuizSet() {
+      const title = prompt("Masukkan Judul Quiz Baru:", `Quiz ${state.arena.quizzes.length + 1} - Tebak Gambar`);
+      if (!title) return;
+
+      const newId = "q-" + Date.now();
+      const newQuiz = {
+        id: newId,
+        title: title.trim(),
+        slides: [],
+        currentSlideIdx: 0,
+        rules: "Tebak gambar di atas dengan cepat!",
+        timerSec: 30,
+        answers: []
+      };
+
+      state.arena.quizzes.push(newQuiz);
+      state.arena.activeQuizId = newId;
+      pushState();
+    }
+
+    function switchQuizSet(quizId) {
+      state.arena.activeQuizId = quizId;
+      pushState();
+    }
+
+    function deleteCurrentQuizSet() {
+      if (state.arena.quizzes.length <= 1) {
+        alert("Tidak bisa menghapus! Minimal harus ada 1 Quiz.");
+        return;
+      }
+
+      const activeQuiz = getActiveQuiz();
+      if (confirm(`Hapus quiz "${activeQuiz.title}" beserta seluruh slide dan jawabannya?`)) {
+        state.arena.quizzes = state.arena.quizzes.filter(q => q.id !== activeQuiz.id);
+        state.arena.activeQuizId = state.arena.quizzes[0].id;
+        pushState();
+      }
+    }
+
     function toggleArenaSession(isOn) {
       state.arena.status = isOn;
       pushState();
     }
 
     function updateArenaRules(val) {
-      state.arena.rules = val;
+      const quiz = getActiveQuiz();
+      quiz.rules = val;
       pushState();
     }
 
@@ -1305,11 +1449,13 @@
       const files = e.target.files;
       if (!files || files.length === 0) return;
 
+      const quiz = getActiveQuiz();
+      if (!quiz.slides) quiz.slides = [];
+
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = (evt) => {
-          if (!state.arena.slides) state.arena.slides = [];
-          state.arena.slides.push(evt.target.result);
+          quiz.slides.push(evt.target.result);
           pushState();
         };
         reader.readAsDataURL(file);
@@ -1317,21 +1463,24 @@
     }
 
     function clearArenaSlides() {
-      state.arena.slides = [];
-      state.arena.currentSlideIdx = 0;
+      const quiz = getActiveQuiz();
+      quiz.slides = [];
+      quiz.currentSlideIdx = 0;
       pushState();
     }
 
     function prevArenaSlide() {
-      if (state.arena.currentSlideIdx > 0) {
-        state.arena.currentSlideIdx--;
+      const quiz = getActiveQuiz();
+      if (quiz.currentSlideIdx > 0) {
+        quiz.currentSlideIdx--;
         pushState();
       }
     }
 
     function nextArenaSlide() {
-      if (state.arena.slides && state.arena.currentSlideIdx < state.arena.slides.length - 1) {
-        state.arena.currentSlideIdx++;
+      const quiz = getActiveQuiz();
+      if (quiz.slides && quiz.currentSlideIdx < quiz.slides.length - 1) {
+        quiz.currentSlideIdx++;
         pushState();
       }
     }
@@ -1339,15 +1488,16 @@
     let arenaTimerInterval = null;
     function startArenaTimer() {
       const sec = parseInt(document.getElementById("inputArenaTimerSec").value) || 30;
-      state.arena.timerSec = sec;
+      const quiz = getActiveQuiz();
+      quiz.timerSec = sec;
       pushState();
 
       if (arenaTimerInterval) clearInterval(arenaTimerInterval);
       arenaTimerInterval = setInterval(() => {
-        if (state.arena.timerSec > 0) {
-          state.arena.timerSec--;
-          document.getElementById("arenaTimerDisplay").textContent = formatTimer(state.arena.timerSec);
-          document.getElementById("interaktifTimerDisplay").textContent = formatTimer(state.arena.timerSec);
+        if (quiz.timerSec > 0) {
+          quiz.timerSec--;
+          document.getElementById("arenaTimerDisplay").textContent = formatTimer(quiz.timerSec);
+          document.getElementById("interaktifTimerDisplay").textContent = formatTimer(quiz.timerSec);
         } else {
           clearInterval(arenaTimerInterval);
           playTimeUpSound();
@@ -1366,6 +1516,16 @@
       toggle.checked = state.arena.status;
       label.textContent = state.arena.status ? "STATUS: ON" : "STATUS: OFF";
 
+      // Render Dropdown Multi Quiz
+      const quizSelect = document.getElementById("selectQuizSet");
+      if (quizSelect) {
+        quizSelect.innerHTML = state.arena.quizzes.map(q => `
+          <option value="${q.id}" ${q.id === state.arena.activeQuizId ? 'selected' : ''}>${q.title}</option>
+        `).join('');
+      }
+
+      const activeQuiz = getActiveQuiz();
+
       if (currentMode === 'peserta' && !state.arena.status) {
         activeDisplay.style.display = "none";
         offDisplay.style.display = "block";
@@ -1374,10 +1534,12 @@
         offDisplay.style.display = "none";
       }
 
-      document.getElementById("arenaRulesText").textContent = state.arena.rules || "Belum ada instruksi khusus.";
-      
-      const slides = state.arena.slides || [];
-      const idx = state.arena.currentSlideIdx || 0;
+      document.getElementById("activeQuizTitleBadge").textContent = activeQuiz.title;
+      document.getElementById("arenaRulesText").textContent = activeQuiz.rules || "Belum ada instruksi khusus.";
+      document.getElementById("inputArenaRules").value = activeQuiz.rules || "";
+
+      const slides = activeQuiz.slides || [];
+      const idx = activeQuiz.currentSlideIdx || 0;
       const imgEl = document.getElementById("arenaImageDisplay");
       const placeholder = document.getElementById("arenaImagePlaceholder");
 
@@ -1395,9 +1557,11 @@
       renderArenaAnswersList();
     }
 
+    // FITUR 2: RENDER JAWABAN LIVE PARTICIPANT TERBARU PADA ARENA
     function renderArenaAnswersList() {
       const listContainer = document.getElementById("arenaAnswersList");
-      const answers = state.arena.answers || [];
+      const quiz = getActiveQuiz();
+      const answers = quiz.answers || [];
 
       if (answers.length === 0) {
         listContainer.innerHTML = `<div class="text-center py-12 text-gray-500 text-xs italic">Belum ada jawaban masuk dari peserta...</div>`;
@@ -1405,7 +1569,7 @@
       }
 
       listContainer.innerHTML = answers.map((ans) => `
-        <div class="p-3 bg-uii-navy border border-uii-border rounded-xl space-y-1">
+        <div class="p-3 bg-uii-navy border border-uii-border rounded-xl space-y-1 shadow-sm">
           <div class="flex items-center justify-between">
             <span class="font-bold text-xs text-uii-gold">${ans.nama}</span>
             <span class="text-[10px] text-gray-500 font-mono">${ans.time}</span>
@@ -1416,10 +1580,12 @@
     }
 
     function clearArenaAnswers() {
-      state.arena.answers = [];
+      const quiz = getActiveQuiz();
+      quiz.answers = [];
       pushState();
     }
 
+    // FITUR 2: SUBMIT JAWABAN INTERAKTIF REALTIME KE QUIZ AKTIF
     function submitInteractiveAnswer(e) {
       e.preventDefault();
       const nama = document.getElementById("interaktifNama").value.trim();
@@ -1428,20 +1594,22 @@
       if (!nama || !jawaban) return;
 
       const newAns = {
-        id: "ans-" + Date.now(),
+        id: "ans-" + Date.now() + Math.random().toString(36).substr(2, 3),
         nama,
         jawaban,
         time: new Date().toLocaleTimeString('id-ID', { hour12: false })
       };
 
-      if (!state.arena.answers) state.arena.answers = [];
-      state.arena.answers.unshift(newAns);
+      const quiz = getActiveQuiz();
+      if (!quiz.answers) quiz.answers = [];
+      quiz.answers.unshift(newAns); // Tambah ke atas paling baru
 
       document.getElementById("interaktifJawaban").value = "";
       alert("Jawaban berhasil dikirim ke panggung!");
       pushState();
     }
 
+    // FITUR 2: LIVE EMOJI REACTION REALTIME
     function sendEmojiReaction(emoji) {
       if (db && isFirebaseConnected) {
         db.ref("ybw_emojis").push(emoji);
@@ -1457,7 +1625,7 @@
 
       const el = document.createElement("div");
       el.textContent = emoji;
-      el.className = "absolute text-3xl transition-all duration-1000 ease-out pointer-events-none";
+      el.className = "absolute text-3xl transition-all duration-1000 ease-out pointer-events-none z-30";
       el.style.left = Math.random() * 80 + 10 + "%";
       el.style.bottom = "0px";
       el.style.opacity = "1";
@@ -1465,7 +1633,7 @@
       box.appendChild(el);
 
       setTimeout(() => {
-        el.style.bottom = "100px";
+        el.style.bottom = "110px";
         el.style.opacity = "0";
       }, 50);
 
