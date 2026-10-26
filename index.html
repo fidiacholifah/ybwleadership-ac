@@ -447,12 +447,12 @@
         <form onsubmit="submitInteractiveAnswer(event)" class="space-y-4">
           <div>
             <label class="block text-xs font-medium text-gray-400 mb-1">Nama Peserta</label>
-            <input type="text" id="interaktifNama" required placeholder="Masukkan nama lengkap kamu..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold">
+            <input type="text" id="interaktifNama" required placeholder="Masukkan Nama Anda" class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold">
           </div>
 
           <div>
             <label class="block text-xs font-medium text-gray-400 mb-1">Jawaban / Tanggapan</label>
-            <textarea id="interaktifJawaban" required rows="3" placeholder="Tulis jawaban kamu di sini..." class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold resize-none"></textarea>
+            <textarea id="interaktifJawaban" required rows="3" placeholder="Tulis Jawaban Anda" class="w-full bg-uii-navy border border-uii-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-uii-gold resize-none"></textarea>
           </div>
 
           <div class="bg-uii-navy p-3.5 rounded-xl border border-uii-border flex items-center justify-between">
@@ -532,7 +532,6 @@
         <label class="block text-xs font-medium text-gray-400 mb-1">URL Website / GitHub Pages:</label>
         <input type="text" id="inputQRUrl" value="" onchange="generateQRCode(this.value)" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3 py-2 text-xs text-white text-center focus:outline-none focus:border-uii-gold">
       </div>
-      <p class="text-[11px] text-gray-400 italic">Minta peserta meng-scan QR Code ini dari HP masing-masing.</p>
     </div>
   </div>
 
@@ -1684,7 +1683,7 @@
       const modal = document.getElementById("modalQR");
       if (modal) modal.style.display = "none";
     }
-    url="https://uii.id/spinleadership-ac";
+    
     function generateQRCode(url) {
       const container = document.getElementById("qrcodeContainer");
       if (!container) return;
