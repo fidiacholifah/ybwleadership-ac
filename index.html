@@ -650,11 +650,11 @@
       setMode('peserta');
       renderWheel();
 
-      const defaultUrl = "https://uii.id/spinpesertaleadership-ac";
+      const targetUrl = "https://uii.id/spinpesertaleadership-ac";
       const qrInput = document.getElementById("inputQRUrl");
       if (qrInput) {
-        qrInput.value = defaultUrl;
-        generateQRCode(defaultUrl);
+        qrInput.value = targetUrl;
+        generateQRCode(targetUrl);
       }
 
       if (localChannel) {
@@ -1360,7 +1360,6 @@
         csvContent += `${idx + 1},"${item.nama}","${item.batch}","${item.date}","${item.sesi}","${item.statusPartisipasi}","${item.statusHadiah}"\n`;
       });
       const encodedUri = encodeURI(csvContent);
-      const link = document.getElementById("a");
       const linkEl = document.createElement("a");
       linkEl.setAttribute("href", encodedUri);
       linkEl.setAttribute("download", `Rekap_Partisipasi_YBW_UII.csv`);
@@ -1678,6 +1677,9 @@
 
     function openQRModal() {
       const modal = document.getElementById("modalQR");
+      const qrInput = document.getElementById("inputQRUrl");
+      const targetUrl = (qrInput && qrInput.value) ? qrInput.value : "https://uii.id/spinpesertaleadership-ac";
+      generateQRCode(targetUrl);
       if (modal) modal.style.display = "flex";
     }
 
