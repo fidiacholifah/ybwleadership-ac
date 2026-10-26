@@ -530,7 +530,7 @@
 
       <div>
         <label class="block text-xs font-medium text-gray-400 mb-1">URL Website / GitHub Pages:</label>
-        <input type="text" id="inputQRUrl" value="" onchange="generateQRCode(this.value)" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3 py-2 text-xs text-white text-center focus:outline-none focus:border-uii-gold">
+        <input type="text" id="inputQRUrl" value="https://uii.id/spinpesertaleadership-ac" onchange="generateQRCode(this.value)" class="w-full bg-uii-navy border border-uii-border rounded-xl px-3 py-2 text-xs text-white text-center focus:outline-none focus:border-uii-gold">
       </div>
     </div>
   </div>
@@ -650,10 +650,11 @@
       setMode('peserta');
       renderWheel();
 
+      const defaultUrl = "https://uii.id/spinpesertaleadership-ac";
       const qrInput = document.getElementById("inputQRUrl");
       if (qrInput) {
-        qrInput.value = window.location.href;
-        generateQRCode(window.location.href);
+        qrInput.value = defaultUrl;
+        generateQRCode(defaultUrl);
       }
 
       if (localChannel) {
@@ -1359,12 +1360,13 @@
         csvContent += `${idx + 1},"${item.nama}","${item.batch}","${item.date}","${item.sesi}","${item.statusPartisipasi}","${item.statusHadiah}"\n`;
       });
       const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `Rekap_Partisipasi_YBW_UII.csv`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const link = document.getElementById("a");
+      const linkEl = document.createElement("a");
+      linkEl.setAttribute("href", encodedUri);
+      linkEl.setAttribute("download", `Rekap_Partisipasi_YBW_UII.csv`);
+      document.body.appendChild(linkEl);
+      linkEl.click();
+      linkEl.remove();
     }
 
     function addNewQuizSet() {
